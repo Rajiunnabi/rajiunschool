@@ -11,8 +11,8 @@ using rajiunschool.data;
 namespace rajiunschool.Migrations
 {
     [DbContext(typeof(UmanagementContext))]
-    [Migration("20250212111519_updateUserTable")]
-    partial class updateUserTable
+    [Migration("20250212145657_raju1")]
+    partial class raju1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

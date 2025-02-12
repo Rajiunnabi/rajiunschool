@@ -6,6 +6,7 @@ namespace rajiunschool.Controllers
     using Microsoft.AspNetCore.Http;
     using System.Linq;
     using rajiunschool.data;
+    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     public class AuthController : Controller
     {
@@ -27,8 +28,7 @@ namespace rajiunschool.Controllers
         public IActionResult Login(string username, string password)
         {
             var user = _context.Users.FirstOrDefault(u => u.username == username && u.password == password);
-            int id = int.Parse(username);
-            var user1 = _context.Users.FirstOrDefault(u => u.id == id && u.password == password);
+            
 
             if (user != null)
             {
@@ -41,15 +41,21 @@ namespace rajiunschool.Controllers
             }
             else
             {
-                if(user1 != null)
+                int id;
+                if (int.TryParse(username, out id))
                 {
-                    // Store session variables
-                    HttpContext.Session.SetString("UserRole", user1.role);
-                    HttpContext.Session.SetInt32("UserId", user1.id);
+                    var user1 = _context.Users.FirstOrDefault(u => u.id == id && u.password == password);
+                    if (user1 != null)
+                    {
+                        // Store session variables
+                        HttpContext.Session.SetString("UserRole", user1.role);
+                        HttpContext.Session.SetInt32("UserId", user1.id);
 
-                    // Role-based redirection
-                    return RedirectToAction("Dashboard", "Dashboard");
+                        // Role-based redirection
+                        return RedirectToAction("Dashboard", "Dashboard");
+                    }
                 }
+                
             }
 
             ViewBag.Error = "Invalid Username or Password";

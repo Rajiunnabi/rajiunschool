@@ -1,0 +1,67 @@
+﻿@model List<users>
+
+@{
+    ViewData["Title"] = "User List";
+}
+
+<style>
+    .container {
+        margin-top: 50px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-danger {
+        padding: 5px 10px;
+        text-decoration: none;
+        color: white;
+        background-color: red;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="container">
+    <h2 class="text-center mb-4">User List</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Department</th>
+                <th>Action</th>
+                <th>Adduser</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.id</td>
+                    <td>@user.username</td>
+                    <td>@user.role</td>
+                    <td>
+                        <a href="@Url.Action("Delete", "CrudTable", new { id = user.id })" class="btn btn-danger">Delete</a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("AddUser", "CrudTable")" class="btn btn-dark">AddUser</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
