@@ -20,5 +20,6 @@ namespace rajiunschool.data
         public DbSet<subjectrequest> SubjectRequests { get; set; }
         public DbSet<teachercourseview> TeacherCourseViews { get; set; }
         public DbSet<users> Users { get; set; }
+        // public DbSet<users> Users { get; set; }
     }
 }
