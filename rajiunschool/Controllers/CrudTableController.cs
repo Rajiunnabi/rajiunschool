@@ -28,7 +28,7 @@ namespace rajiunschool.Controllers
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("UserList", "User");
         }
         [HttpGet]
         public IActionResult AddUser()
@@ -54,7 +54,7 @@ namespace rajiunschool.Controllers
             _context.SaveChanges();
 
             ViewBag.Message = "User added successfully!";
-            return View();
+            return RedirectToAction("UserList", "User");
         }
     }
 }
