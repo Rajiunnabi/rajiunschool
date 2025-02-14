@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using rajiunschool.data;
 
@@ -10,9 +11,11 @@ using rajiunschool.data;
 namespace rajiunschool.Migrations
 {
     [DbContext(typeof(UmanagementContext))]
-    partial class UmanagementContextModelSnapshot : ModelSnapshot
+    [Migration("20250213080805_a")]
+    partial class a
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -455,30 +458,6 @@ namespace rajiunschool.Migrations
                     b.HasKey("id");
 
                     b.ToTable("TeacherCourseViews");
-                });
-
-            modelBuilder.Entity("rajiunschool.Models.teacherevaluation", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("dept")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("details")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("subjectid")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Teacherevaluations");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.users", b =>

@@ -1,7 +1,7 @@
 ﻿@model List<users>
 
 @{
-    ViewData["Title"] = "User List";
+    String UserListnow = ViewData["UserListnow"] as string;
 }
 
 <style>
@@ -50,17 +50,17 @@
         <tbody>
             @foreach (var user in Model)
             {
-                <tr>
-                    <td>@user.id</td>
-                    <td>@user.username</td>
-                    <td>@user.role</td>
-                    <td>
-                        <a href="@Url.Action("Delete", "CrudTable", new { id = user.id })" class="btn btn-danger">Delete</a>
-                    </td>
-                    <td>
-                        <a href="@Url.Action("AddUser", "CrudTable")" class="btn btn-dark">AddUser</a>
-                    </td>
-                </tr>
+                if(user.role.Equals(UserListnow)){
+                    <tr>
+                        <td>@user.id</td>
+                        <td>@user.username</td>
+                        <td>@user.role</td>
+                        <td>
+                            <a href="@Url.Action("Delete", "CrudTable", new { id = user.id, UserListnow = UserListnow })" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+               
             }
         </tbody>
     </table>

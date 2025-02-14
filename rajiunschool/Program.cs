@@ -6,15 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Configure session
+builder.Services.AddDistributedMemoryCache(); // Session storage
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout (30 minutes)
+    options.IdleTimeout = TimeSpan.FromDays(10);  // Session timeout (30 minutes)
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddDistributedMemoryCache();
-
+// Configure the database context
 builder.Services.AddDbContext<UmanagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("UmanagementDB")));
 
@@ -27,7 +28,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseSession();
+app.UseSession(); // Add session middleware to the pipeline
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
