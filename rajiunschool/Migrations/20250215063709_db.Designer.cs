@@ -11,8 +11,8 @@ using rajiunschool.data;
 namespace rajiunschool.Migrations
 {
     [DbContext(typeof(UmanagementContext))]
-    [Migration("20250212145657_raju1")]
-    partial class raju1
+    [Migration("20250215063709_db")]
+    partial class db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -460,6 +460,30 @@ namespace rajiunschool.Migrations
                     b.ToTable("TeacherCourseViews");
                 });
 
+            modelBuilder.Entity("rajiunschool.Models.teacherevaluation", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("dept")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("details")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("subjectid")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Teacherevaluations");
+                });
+
             modelBuilder.Entity("rajiunschool.Models.users", b =>
                 {
                     b.Property<int>("id")
@@ -467,6 +491,10 @@ namespace rajiunschool.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("ProfilePicture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("password")
                         .IsRequired()

@@ -44,4 +44,35 @@ public class UserController : Controller
         var users = _context.Users.ToList(); // Fetch users from the database
         return View("Userlist", users);// Pass data to the view
     }
+    public IActionResult Details(int id)
+    {
+        var user = _context.Users
+            .Where(u => u.id == id)
+            .Select(u => new
+            {
+                u.id,
+                u.username,
+                u.role,
+                ProfilePicture = string.IsNullOrEmpty(u.ProfilePicture) ? "/images/default-avatar.png" : u.ProfilePicture
+            })
+            .FirstOrDefault();
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return View(new users
+        {
+            id = user.id,
+            username = user.username,
+            role = user.role,
+            ProfilePicture = user.ProfilePicture
+        });
+    }
+    public IActionResult nextPage()
+    {
+        return View();
+    }
+
 }

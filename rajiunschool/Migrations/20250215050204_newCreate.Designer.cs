@@ -11,8 +11,8 @@ using rajiunschool.data;
 namespace rajiunschool.Migrations
 {
     [DbContext(typeof(UmanagementContext))]
-    [Migration("20250213080805_a")]
-    partial class a
+    [Migration("20250215050204_newCreate")]
+    partial class newCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -458,6 +458,30 @@ namespace rajiunschool.Migrations
                     b.HasKey("id");
 
                     b.ToTable("TeacherCourseViews");
+                });
+
+            modelBuilder.Entity("rajiunschool.Models.teacherevaluation", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("dept")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("details")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("subjectid")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Teacherevaluations");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.users", b =>

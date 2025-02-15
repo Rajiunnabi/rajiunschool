@@ -45,7 +45,7 @@
             <div class="alert alert-danger">@ViewBag.Error</div>
         }
 
-        <form asp-action="AddUser" asp-controller="CrudTable" method="post">
+        <form asp-action="AddUser" asp-controller="CrudTable" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Username</label>
                 <input type="text" name="Username" class="form-control" placeholder="Enter username" required>
@@ -66,6 +66,11 @@
                 <select asp-for="SelectedOption" asp-items="Model.Options" class="form-control">
                     <option value="">-- Select an option --</option>
                 </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Profile Picture</label>
+                <input type="file" name="ProfileImage" class="form-control" accept="image/*">
             </div>
 
             <button type="submit" class="btn btn-success">Add User</button>

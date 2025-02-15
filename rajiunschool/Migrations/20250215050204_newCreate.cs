@@ -5,7 +5,7 @@
 namespace rajiunschool.Migrations
 {
     /// <inheritdoc />
-    public partial class raju1 : Migration
+    public partial class newCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -255,6 +255,21 @@ namespace rajiunschool.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Teacherevaluations",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    dept = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    subjectid = table.Column<int>(type: "int", nullable: false),
+                    details = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teacherevaluations", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -314,6 +329,9 @@ namespace rajiunschool.Migrations
 
             migrationBuilder.DropTable(
                 name: "TeacherCourseViews");
+
+            migrationBuilder.DropTable(
+                name: "Teacherevaluations");
 
             migrationBuilder.DropTable(
                 name: "Users");

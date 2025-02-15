@@ -2,11 +2,20 @@
 
 @{
     String UserListnow = ViewData["UserListnow"] as string;
+    bool showButton = (UserListnow == "Teacher" || UserListnow == "Student"); // Check if user is Teacher or Student
 }
 
 <style>
     .container {
         margin-top: 50px;
+        position: relative;
+    }
+
+    .top-right-btn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 10px;
     }
 
     table {
@@ -25,16 +34,29 @@
         color: white;
     }
 
-    .btn-danger {
+    .btn-danger, .btn-primary {
         padding: 5px 10px;
         text-decoration: none;
         color: white;
-        background-color: red;
         border-radius: 5px;
+    }
+
+    .btn-danger {
+        background-color: red;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
     }
 </style>
 
 <div class="container">
+    <!-- Show button only if user is a Teacher or Student -->
+    @if (showButton)
+    {
+        <a href="@Url.Action("nextPage", "User")" class="btn btn-success top-right-btn">Go To Next Page</a>
+    }
+
     <h2 class="text-center mb-4">User List</h2>
 
     <table class="table table-bordered">
@@ -44,13 +66,14 @@
                 <th>Username</th>
                 <th>Department</th>
                 <th>Action</th>
-                <th>Adduser</th>
+                <th>Profile</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var user in Model)
             {
-                if(user.role.Equals(UserListnow)){
+                if (user.role.Equals(UserListnow))
+                {
                     <tr>
                         <td>@user.id</td>
                         <td>@user.username</td>
@@ -58,9 +81,11 @@
                         <td>
                             <a href="@Url.Action("Delete", "CrudTable", new { id = user.id, UserListnow = UserListnow })" class="btn btn-danger">Delete</a>
                         </td>
+                        <td>
+                            <a href="@Url.Action("Details", "User", new { id = user.id })" class="btn btn-primary">View Profile</a>
+                        </td>
                     </tr>
                 }
-               
             }
         </tbody>
     </table>
