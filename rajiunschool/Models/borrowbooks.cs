@@ -2,7 +2,7 @@
 {
     public class borrowbooks
     {
-        public int id { get; set; }
+        public int studentid { get; set; }
         public string borrowedtime { get; set; }
 
         public string takenbacktime { get; set; }

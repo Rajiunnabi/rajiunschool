@@ -2,7 +2,7 @@
 {
     public class teachercourseview
     {
-        public int id { get; set; }
+        public int subjectid { get; set; }
         public string dept { get; set; }
         public string sem { get; set; }
         public int session { get; set; }

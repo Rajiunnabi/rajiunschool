@@ -2,7 +2,7 @@
 {
     public class paymentinfo
     {
-        public int id { get; set; }
+        public int userid { get; set; }
         public string paymentdate { get; set; }
 
         public string paymentmethod { get; set; }

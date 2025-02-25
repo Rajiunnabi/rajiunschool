@@ -2,7 +2,7 @@
 {
     public class studentnumbersheet
     {
-        public int id { get; set; }
+        public int studentid { get; set; }
         public string semester { get; set; }
 
         public int subject1 { get; set; }

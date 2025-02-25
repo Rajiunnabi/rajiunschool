@@ -2,7 +2,7 @@
 {
     public class paymentviewforstudent
     {
-        public int id { get; set; }
+        public int studentid { get; set; }
         public int punishmentfee { get; set; }
 
         public int transictionid { get; set; }

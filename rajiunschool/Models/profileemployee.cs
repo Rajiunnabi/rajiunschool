@@ -2,7 +2,7 @@
 {
     public class profileemployee
     {
-        public int id { get; set; }
+        public int profileid { get; set; }
         public string name { get; set; }
 
         public string joindate { get; set; }

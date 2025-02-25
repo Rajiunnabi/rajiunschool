@@ -2,7 +2,7 @@
 {
     public class subjectrequest
     {
-        public int id { get; set; }
+        public int subjectid { get; set; }
         public int teacherid { get; set; }
     }
 }

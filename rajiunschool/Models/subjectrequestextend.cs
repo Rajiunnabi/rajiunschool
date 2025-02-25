@@ -4,7 +4,7 @@
     {
         public subjectlist subject {  get; set; }
         
-        public int id {  get; set; }
-        public profileemployee profileemployee { get; set; }
+        public int teacherid {  get; set; }
+        public profileemployee profileteacher { get; set; }
     }
 }

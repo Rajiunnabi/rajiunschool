@@ -2,7 +2,7 @@
 {
     public class failedcoursemark
     {
-        public int id { get; set; }
+        public int studentid { get; set; }
         public int ct { get; set; }
 
         public int attendance { get; set; }
