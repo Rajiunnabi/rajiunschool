@@ -4,82 +4,81 @@
     String UserListnow = ViewData["UserListnow"] as string;
     bool showButton = (UserListnow == "Teacher" || UserListnow == "Student"); // Check if user is Teacher or Student
 }
-
-<style>
-    .container {
+    <style>
+        .container {
         margin-top: 50px;
         position: relative;
-    }
+        }
 
-    .top-right-btn {
+        .top-right-btn {
         position: absolute;
         top: 0;
         right: 0;
         margin: 10px;
-    }
+        }
 
-    table {
+        table {
         width: 100%;
         border-collapse: collapse;
-    }
+        }
 
-    th, td {
+        th, td {
         padding: 10px;
         border: 1px solid #ddd;
         text-align: center;
-    }
+        }
 
-    th {
+        th {
         background-color: #007bff;
         color: white;
-    }
+        }
 
-    .btn-danger, .btn-primary {
+        .btn-danger, .btn-primary {
         padding: 5px 10px;
         text-decoration: none;
         color: white;
         border-radius: 5px;
-    }
+        }
 
-    .btn-danger {
+        .btn-danger {
         background-color: red;
-    }
+        }
 
-    .btn-primary {
+        .btn-primary {
         background-color: #007bff;
-    }
-</style>
+        }
+    </style>
 
-<div class="container">
-    <!-- Show button only if user is a Teacher or Student -->
-    @if (showButton)
-    {
-        <a href="@Url.Action("nextPage", "User")" class="btn btn-success top-right-btn">Go To Next Page</a>
-    }
+    <div class="container">
+        <!-- Show button only if user is a Teacher or Student -->
+        @if (showButton)
+        {
+        <a href="@Url.Action("nextPage", "User",new {UserListnow=UserListnow})" class="btn btn-success top-right-btn">Go To Next Page</a>
+        }
 
-    <h2 class="text-center mb-4">User List</h2>
+        <h2 class="text-center mb-4">User List</h2>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Department</th>
-                <th>Action</th>
-                <th>Profile</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model)
-            {
-                if (user.role.Equals(UserListnow))
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Department</th>
+                    <th>Action</th>
+                    <th>Profile</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
                 {
-                    <tr>
+                    if (user.role.Equals(UserListnow))
+                    {
+                        <tr>
                         <td>@user.id</td>
                         <td>@user.username</td>
                         <td>@user.role</td>
                         <td>
-                            <a href="@Url.Action("Delete", "CrudTable", new { id = user.id, UserListnow = UserListnow })" class="btn btn-danger">Delete</a>
+                            <a href="@Url.Action("Delete", "CrudTable", new { id = user.id})" class="btn btn-danger">Delete</a>
                         </td>
                         <td>
                             <a href="@Url.Action("Details", "User", new { id = user.id })" class="btn btn-primary">View Profile</a>

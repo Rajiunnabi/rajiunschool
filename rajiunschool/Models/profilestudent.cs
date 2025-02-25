@@ -12,7 +12,7 @@
         public string admittedsemester { get; set; }
 
         public string labclearancestatus { get; set; }
+        public string? ProfilePicture { get; set; }
 
-        public int session { get; set; }
     }
 }

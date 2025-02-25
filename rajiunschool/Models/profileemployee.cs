@@ -7,16 +7,14 @@
 
         public string joindate { get; set; }
 
-        public int age { get; set; }
+        public int? age { get; set; }
 
-        public string sex { get; set; }
+        public string? sex { get; set; }
 
-        public string bloodgroup { get; set; }
-
+        public string? bloodgroup { get; set; }
+        public string? details { get; set; }
         public string dept { get; set; }
+        public string? ProfilePicture { get; set; }
 
-        public string details { get; set; }
-
-        public int session { get; set; }
     }
 }

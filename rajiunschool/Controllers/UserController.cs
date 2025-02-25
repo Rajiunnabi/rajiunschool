@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using rajiunschool.data;
 using rajiunschool.Models;
 public class UserController : Controller
@@ -44,35 +45,28 @@ public class UserController : Controller
         var users = _context.Users.ToList(); // Fetch users from the database
         return View("Userlist", users);// Pass data to the view
     }
-    public IActionResult Details(int id)
+    public async Task<IActionResult> Details(int id)
     {
-        var user = _context.Users
-            .Where(u => u.id == id)
-            .Select(u => new
-            {
-                u.id,
-                u.username,
-                u.role,
-                ProfilePicture = string.IsNullOrEmpty(u.ProfilePicture) ? "/images/default-avatar.png" : u.ProfilePicture
-            })
-            .FirstOrDefault();
-
-        if (user == null)
+        var user = await _context.Users.FindAsync(id);
+        if (user.role.Equals("Student"))
         {
-            return NotFound();
+            var profile=await _context.ProfileStudents.FindAsync(id);
+            return View("StudentDetails",profile);
+
+        }
+        else
+        {
+            var profile = await _context.ProfileEmployees.FindAsync(id);
+            return View("EmployeeDetails",profile);
+
         }
 
-        return View(new users
-        {
-            id = user.id,
-            username = user.username,
-            role = user.role,
-            ProfilePicture = user.ProfilePicture
-        });
     }
-    public IActionResult nextPage()
+    public IActionResult nextPage(String UserListnow)
     {
-        return View();
+        if (UserListnow.Equals( "Teacher"))
+            return View("nextPageTeacher");
+         return View("nextPageStudent");
     }
 
 }

@@ -9,12 +9,9 @@
 
         public string semester { get; set; }
 
-        public int instructor { get; set; }
-
-        public string details { get; set; }
+        public int? instructor { get; set; }
 
         public int takaperclass { get; set; }
 
-        public int session { get; set; }
     }
 }
