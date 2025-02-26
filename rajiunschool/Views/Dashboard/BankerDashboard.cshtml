@@ -56,6 +56,22 @@
             padding-left: 15px;
         }
 
+    .logout-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 12px 18px;
+        cursor: pointer;
+        border-radius: 30px; /* More circular shape */
+        font-size: 14px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
     /* Main Content */
     .content {
         flex: 1;
@@ -83,8 +99,11 @@
         }
 </style>
 
+<!-- Logout Button -->
+<a href="@Url.Action("Logout", "Auth")" class="logout-button">Logout</a>
+
 <div class="left-navbar">
     <h4>Banker Panel</h4>
-    <a href="" class="nav-link">Manage Payments</a>
-    <a href="" class="nav-link">View Payments</a>
+    <a href="@Url.Action("Payments", "Dashboard")" class="nav-link">Manage Payments</a>
+    <a href="@Url.Action("Transactions", "Dashboard")" class="nav-link">View Transactions</a>
 </div>
