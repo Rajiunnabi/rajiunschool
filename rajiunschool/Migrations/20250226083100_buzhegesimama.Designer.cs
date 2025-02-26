@@ -11,8 +11,8 @@ using rajiunschool.data;
 namespace rajiunschool.Migrations
 {
     [DbContext(typeof(UmanagementContext))]
-    [Migration("20250215053524_second")]
-    partial class second
+    [Migration("20250226083100_buzhegesimama")]
+    partial class buzhegesimama
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,32 +58,35 @@ namespace rajiunschool.Migrations
 
             modelBuilder.Entity("rajiunschool.Models.borrowbooks", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
 
                     b.Property<string>("borrowedtime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("studentid")
+                        .HasColumnType("int");
+
                     b.Property<string>("takenbacktime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("hudao");
 
                     b.ToTable("BorrowBooks");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.currentcoursemark", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
 
                     b.Property<int>("attendance")
                         .HasColumnType("int");
@@ -94,18 +97,21 @@ namespace rajiunschool.Migrations
                     b.Property<int>("final")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.Property<int>("studentid")
+                        .HasColumnType("int");
+
+                    b.HasKey("hudao");
 
                     b.ToTable("CurrentCourseMarks");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.failedcoursemark", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
 
                     b.Property<int>("attendance")
                         .HasColumnType("int");
@@ -116,18 +122,21 @@ namespace rajiunschool.Migrations
                     b.Property<int>("final")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.Property<int>("studentid")
+                        .HasColumnType("int");
+
+                    b.HasKey("hudao");
 
                     b.ToTable("FailedCourseMarks");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.paymentinfo", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
 
                     b.Property<string>("paymentdate")
                         .IsRequired()
@@ -140,18 +149,21 @@ namespace rajiunschool.Migrations
                     b.Property<int>("session")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.Property<int>("userid")
+                        .HasColumnType("int");
+
+                    b.HasKey("hudao");
 
                     b.ToTable("PaymentInfos");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.paymentviewforothers", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
 
                     b.Property<int>("amount")
                         .HasColumnType("int");
@@ -159,21 +171,24 @@ namespace rajiunschool.Migrations
                     b.Property<int>("bonus")
                         .HasColumnType("int");
 
+                    b.Property<int>("employeeid")
+                        .HasColumnType("int");
+
                     b.Property<int>("session")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.HasKey("hudao");
 
                     b.ToTable("PaymentViewForOthers");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.paymentviewforstudent", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
 
                     b.Property<int>("addmissionfee")
                         .HasColumnType("int");
@@ -187,6 +202,9 @@ namespace rajiunschool.Migrations
                     b.Property<int>("status")
                         .HasColumnType("int");
 
+                    b.Property<int>("studentid")
+                        .HasColumnType("int");
+
                     b.Property<int>("transictionid")
                         .HasColumnType("int");
 
@@ -196,18 +214,18 @@ namespace rajiunschool.Migrations
                     b.Property<int>("tutionfee")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.HasKey("hudao");
 
                     b.ToTable("PaymentViewForStudents");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.paymentviewforteacher", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
 
                     b.Property<int>("bonusfee")
                         .HasColumnType("int");
@@ -227,24 +245,29 @@ namespace rajiunschool.Migrations
                     b.Property<int>("subject4")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.Property<int>("teacherid")
+                        .HasColumnType("int");
+
+                    b.HasKey("hudao");
 
                     b.ToTable("PaymentViewForTeachers");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.profileemployee", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
 
-                    b.Property<int>("age")
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("age")
                         .HasColumnType("int");
 
                     b.Property<string>("bloodgroup")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("dept")
@@ -252,7 +275,6 @@ namespace rajiunschool.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("details")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("joindate")
@@ -263,25 +285,27 @@ namespace rajiunschool.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("session")
+                    b.Property<int>("profileid")
                         .HasColumnType("int");
 
                     b.Property<string>("sex")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("hudao");
 
                     b.ToTable("ProfileEmployees");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.profilestudent", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
+
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("admittedsemester")
                         .IsRequired()
@@ -299,25 +323,42 @@ namespace rajiunschool.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("profileid")
+                        .HasColumnType("int");
+
                     b.Property<string>("semester")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("session")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
+                    b.HasKey("hudao");
 
                     b.ToTable("ProfileStudents");
                 });
 
-            modelBuilder.Entity("rajiunschool.Models.studentnumbersheet", b =>
+            modelBuilder.Entity("rajiunschool.Models.session", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Session");
+                });
+
+            modelBuilder.Entity("rajiunschool.Models.studentnumbersheet", b =>
+                {
+                    b.Property<int>("hudao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
 
                     b.Property<int>("mark1")
                         .HasColumnType("int");
@@ -350,6 +391,9 @@ namespace rajiunschool.Migrations
                     b.Property<int>("session")
                         .HasColumnType("int");
 
+                    b.Property<int>("studentid")
+                        .HasColumnType("int");
+
                     b.Property<int>("subject1")
                         .HasColumnType("int");
 
@@ -374,7 +418,7 @@ namespace rajiunschool.Migrations
                     b.Property<int>("subject8")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.HasKey("hudao");
 
                     b.ToTable("StudentNumberSheets");
                 });
@@ -391,19 +435,12 @@ namespace rajiunschool.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("details")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("instructor")
+                    b.Property<int?>("instructor")
                         .HasColumnType("int");
 
                     b.Property<string>("semester")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("session")
-                        .HasColumnType("int");
 
                     b.Property<string>("subjectname")
                         .IsRequired()
@@ -419,27 +456,30 @@ namespace rajiunschool.Migrations
 
             modelBuilder.Entity("rajiunschool.Models.subjectrequest", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
+
+                    b.Property<int>("subjectid")
+                        .HasColumnType("int");
 
                     b.Property<int>("teacherid")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.HasKey("hudao");
 
                     b.ToTable("SubjectRequests");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.teachercourseview", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
 
                     b.Property<int>("classtaken")
                         .HasColumnType("int");
@@ -455,18 +495,21 @@ namespace rajiunschool.Migrations
                     b.Property<int>("session")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.Property<int>("teacher")
+                        .HasColumnType("int");
+
+                    b.HasKey("hudao");
 
                     b.ToTable("TeacherCourseViews");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.teacherevaluation", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("hudao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("hudao"));
 
                     b.Property<string>("dept")
                         .IsRequired()
@@ -479,7 +522,10 @@ namespace rajiunschool.Migrations
                     b.Property<int>("subjectid")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.Property<int>("teacherid")
+                        .HasColumnType("int");
+
+                    b.HasKey("hudao");
 
                     b.ToTable("Teacherevaluations");
                 });
@@ -491,9 +537,6 @@ namespace rajiunschool.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("ProfilePicture")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("password")
                         .IsRequired()

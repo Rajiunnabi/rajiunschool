@@ -1,7 +1,12 @@
-﻿namespace rajiunschool.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace rajiunschool.Models
 {
     public class paymentviewforteacher
     {
+        [Key]
+        public int hudao { get; set; }
         public int teacherid { get; set; }
         public int subject1 { get; set; }
 

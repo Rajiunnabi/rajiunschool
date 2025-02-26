@@ -108,7 +108,8 @@ namespace rajiunschool.Controllers
                         name = Username,
                         dept = Dept,
                         joindate=DateTime.Now.ToString("MMMM yyyy"),
-                        profileid=lastuser.id
+                        profileid=lastuser.id,
+                        ProfilePicture= null
 
 
                     };
@@ -201,13 +202,11 @@ namespace rajiunschool.Controllers
             {
                 // Fetch the related subject data using the id
                 var subject = _context.SubjectLists.FirstOrDefault(s => s.id == subjectrequest.subjectid);
-                var profileteacher = _context.ProfileEmployees.FirstOrDefault(s => s.profileid == subjectrequest.teacherid);
                 // Create a new object of subjectrequestextend
                 var extendedSubjectRequest = new subjectrequestextend
                 {
                     subject = subject,        // Set the related subject
-                    teacherid = subjectrequest.teacherid,
-                    profileteacher = profileteacher// Set the teacher id from the subjectrequest
+                    teacherid = subjectrequest.teacherid// Set the teacher id from the subjectrequest
                 };
 
                 // Add the extended data to the list

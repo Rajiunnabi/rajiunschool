@@ -5,7 +5,7 @@
 namespace rajiunschool.Migrations
 {
     /// <inheritdoc />
-    public partial class newCreate : Migration
+    public partial class buzhegesimama : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,82 +31,88 @@ namespace rajiunschool.Migrations
                 name: "BorrowBooks",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    studentid = table.Column<int>(type: "int", nullable: false),
                     borrowedtime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     takenbacktime = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BorrowBooks", x => x.id);
+                    table.PrimaryKey("PK_BorrowBooks", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CurrentCourseMarks",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    studentid = table.Column<int>(type: "int", nullable: false),
                     ctmark = table.Column<int>(type: "int", nullable: false),
                     attendance = table.Column<int>(type: "int", nullable: false),
                     final = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CurrentCourseMarks", x => x.id);
+                    table.PrimaryKey("PK_CurrentCourseMarks", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
                 name: "FailedCourseMarks",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    studentid = table.Column<int>(type: "int", nullable: false),
                     ct = table.Column<int>(type: "int", nullable: false),
                     attendance = table.Column<int>(type: "int", nullable: false),
                     final = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FailedCourseMarks", x => x.id);
+                    table.PrimaryKey("PK_FailedCourseMarks", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PaymentInfos",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    userid = table.Column<int>(type: "int", nullable: false),
                     paymentdate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     paymentmethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     session = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PaymentInfos", x => x.id);
+                    table.PrimaryKey("PK_PaymentInfos", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PaymentViewForOthers",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    employeeid = table.Column<int>(type: "int", nullable: false),
                     amount = table.Column<int>(type: "int", nullable: false),
                     bonus = table.Column<int>(type: "int", nullable: false),
                     session = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PaymentViewForOthers", x => x.id);
+                    table.PrimaryKey("PK_PaymentViewForOthers", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PaymentViewForStudents",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    studentid = table.Column<int>(type: "int", nullable: false),
                     punishmentfee = table.Column<int>(type: "int", nullable: false),
                     transictionid = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<int>(type: "int", nullable: false),
@@ -117,15 +123,16 @@ namespace rajiunschool.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PaymentViewForStudents", x => x.id);
+                    table.PrimaryKey("PK_PaymentViewForStudents", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PaymentViewForTeachers",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    teacherid = table.Column<int>(type: "int", nullable: false),
                     subject1 = table.Column<int>(type: "int", nullable: false),
                     subject2 = table.Column<int>(type: "int", nullable: false),
                     subject3 = table.Column<int>(type: "int", nullable: false),
@@ -135,53 +142,69 @@ namespace rajiunschool.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PaymentViewForTeachers", x => x.id);
+                    table.PrimaryKey("PK_PaymentViewForTeachers", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ProfileEmployees",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    profileid = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     joindate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    age = table.Column<int>(type: "int", nullable: false),
-                    sex = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    bloodgroup = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    age = table.Column<int>(type: "int", nullable: true),
+                    sex = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    bloodgroup = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    details = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     dept = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    details = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    session = table.Column<int>(type: "int", nullable: false)
+                    ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProfileEmployees", x => x.id);
+                    table.PrimaryKey("PK_ProfileEmployees", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ProfileStudents",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    profileid = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     dept = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     semester = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     admittedsemester = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     labclearancestatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    session = table.Column<int>(type: "int", nullable: false)
+                    ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProfileStudents", x => x.id);
+                    table.PrimaryKey("PK_ProfileStudents", x => x.hudao);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Session",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Session", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "StudentNumberSheets",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    studentid = table.Column<int>(type: "int", nullable: false),
                     semester = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     subject1 = table.Column<int>(type: "int", nullable: false),
                     subject2 = table.Column<int>(type: "int", nullable: false),
@@ -203,7 +226,7 @@ namespace rajiunschool.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentNumberSheets", x => x.id);
+                    table.PrimaryKey("PK_StudentNumberSheets", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
@@ -215,10 +238,8 @@ namespace rajiunschool.Migrations
                     subjectname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     dept = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     semester = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    instructor = table.Column<int>(type: "int", nullable: false),
-                    details = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    takaperclass = table.Column<int>(type: "int", nullable: false),
-                    session = table.Column<int>(type: "int", nullable: false)
+                    instructor = table.Column<int>(type: "int", nullable: true),
+                    takaperclass = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -229,21 +250,23 @@ namespace rajiunschool.Migrations
                 name: "SubjectRequests",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    subjectid = table.Column<int>(type: "int", nullable: false),
                     teacherid = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubjectRequests", x => x.id);
+                    table.PrimaryKey("PK_SubjectRequests", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
                 name: "TeacherCourseViews",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    teacher = table.Column<int>(type: "int", nullable: false),
                     dept = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     sem = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     session = table.Column<int>(type: "int", nullable: false),
@@ -251,22 +274,23 @@ namespace rajiunschool.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeacherCourseViews", x => x.id);
+                    table.PrimaryKey("PK_TeacherCourseViews", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Teacherevaluations",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    teacherid = table.Column<int>(type: "int", nullable: false),
                     dept = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     subjectid = table.Column<int>(type: "int", nullable: false),
                     details = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Teacherevaluations", x => x.id);
+                    table.PrimaryKey("PK_Teacherevaluations", x => x.hudao);
                 });
 
             migrationBuilder.CreateTable(
@@ -317,6 +341,9 @@ namespace rajiunschool.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProfileStudents");
+
+            migrationBuilder.DropTable(
+                name: "Session");
 
             migrationBuilder.DropTable(
                 name: "StudentNumberSheets");

@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using rajiunschool.Models;
+
 namespace rajiunschool.data
 {
     public class UmanagementContext : DbContext
     {
         public UmanagementContext(DbContextOptions<UmanagementContext> options) : base(options) { }
+
         public DbSet<booklist> Booklists { get; set; }
         public DbSet<borrowbooks> BorrowBooks { get; set; }
         public DbSet<currentcoursemark> CurrentCourseMarks { get; set; }
@@ -22,5 +24,7 @@ namespace rajiunschool.data
         public DbSet<users> Users { get; set; }
         public DbSet<teacherevaluation> Teacherevaluations { get; set; }
         public DbSet<session> Session { get; set; }
+
+       
     }
 }

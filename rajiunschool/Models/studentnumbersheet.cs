@@ -1,7 +1,12 @@
-﻿namespace rajiunschool.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace rajiunschool.Models
 {
     public class studentnumbersheet
     {
+        [Key]
+        public int hudao { get; set; }
         public int studentid { get; set; }
         public string semester { get; set; }
 

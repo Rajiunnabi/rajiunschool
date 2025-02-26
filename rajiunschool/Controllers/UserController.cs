@@ -50,13 +50,13 @@ public class UserController : Controller
         var user = await _context.Users.FindAsync(id);
         if (user.role.Equals("Student"))
         {
-            var profile=await _context.ProfileStudents.FindAsync(id);
+            var profile= await _context.ProfileStudents.FirstOrDefaultAsync(e => e.profileid == id);
             return View("StudentDetails",profile);
 
         }
         else
         {
-            var profile = await _context.ProfileEmployees.FindAsync(id);
+            var profile = await _context.ProfileEmployees.FirstOrDefaultAsync(e => e.profileid == id);
             return View("EmployeeDetails",profile);
 
         }
