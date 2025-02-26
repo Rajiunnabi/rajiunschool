@@ -24,6 +24,8 @@
                     return RedirectToAction("TeacherDashboard");
                 case "Employee":
                     return RedirectToAction("EmployeeDashboard");
+                case "Banker":
+                    return RedirectToAction("BankerDashboard");
                 default:
                     return RedirectToAction("Login", "Auth");
             }
@@ -56,6 +58,13 @@
         public IActionResult EmployeeDashboard()
         {
             if (HttpContext.Session.GetString("UserRole") != "Employee")
+                return RedirectToAction("Login", "Auth");
+
+            return View();
+        }
+        public IActionResult BankerDashboard()
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Banker")
                 return RedirectToAction("Login", "Auth");
 
             return View();
