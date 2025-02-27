@@ -13,38 +13,101 @@ public class UserController : Controller
     }
 
     // GET: Display users in a table
-    public IActionResult Student()
+    public IActionResult Student(string searchQuery)
     {
         ViewData["UserListnow"] = "Student";
-        var users = _context.Users.ToList(); // Fetch users from the database
-        return View("Userlist", users);// Pass data to the view
-    }
+    
+        var users = _context.Users
+            .Where(u => u.role == "Student")
+            .ToList(); // Fetch all students by default
 
-    public IActionResult Teacher()
+        if (!string.IsNullOrEmpty(searchQuery))
+        {
+            users = users.Where(u =>
+                u.id.ToString().Contains(searchQuery) || 
+                u.username.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        }
+
+        return View("Userlist", users); // Pass filtered data to the view
+    }
+    public IActionResult Teacher(string searchQuery)
     {
         ViewData["UserListnow"] = "Teacher";
-        var users = _context.Users.ToList(); // Fetch users from the database
-        return View("Userlist", users);// Pass data to the view
-    }
-    public IActionResult Libarian()
-    {
-        ViewData["UserListnow"] = "Libarian";
-        var users = _context.Users.ToList(); // Fetch users from the database
-        return View("Userlist", users);// Pass data to the view
+
+        var teachers = _context.Users
+            .Where(u => u.role == "Teacher")
+            .ToList(); // Fetch all teachers by default
+
+        if (!string.IsNullOrEmpty(searchQuery))
+        {
+            teachers = teachers.Where(u =>
+                u.id.ToString().Contains(searchQuery) ||
+                u.username.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        }
+
+        return View("Userlist", teachers); // Pass filtered or full list to the view
     }
 
-    public IActionResult Banker()
+    public IActionResult Libarian(string searchQuery)
+    {
+        ViewData["UserListnow"] = "Libarian";
+
+        var librarians = _context.Users
+            .Where(u => u.role == "Libarian")
+            .ToList(); // Fetch all librarians by default
+
+        if (!string.IsNullOrEmpty(searchQuery))
+        {
+            librarians = librarians.Where(u =>
+                u.id.ToString().Contains(searchQuery) ||
+                u.username.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        }
+
+        return View("Userlist", librarians); // Pass filtered or full list to the view
+    }
+
+
+    public IActionResult Banker(string searchQuery)
     {
         ViewData["UserListnow"] = "Banker";
-        var users = _context.Users.ToList(); // Fetch users from the database
-        return View("Userlist", users);// Pass data to the view
+
+        var bankers = _context.Users
+            .Where(u => u.role == "Banker")
+            .ToList(); // Fetch all bankers by default
+
+        if (!string.IsNullOrEmpty(searchQuery))
+        {
+            bankers = bankers.Where(u =>
+                u.id.ToString().Contains(searchQuery) ||
+                u.username.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        }
+
+        return View("Userlist", bankers); // Pass filtered or full list to the view
     }
-    public IActionResult Others()
+
+    public IActionResult Others(string searchQuery)
     {
         ViewData["UserListnow"] = "Others";
-        var users = _context.Users.ToList(); // Fetch users from the database
-        return View("Userlist", users);// Pass data to the view
+
+        var others = _context.Users
+            .Where(u => u.role == "Others")
+            .ToList(); // Fetch all users in "Others" category by default
+
+        if (!string.IsNullOrEmpty(searchQuery))
+        {
+            others = others.Where(u =>
+                u.id.ToString().Contains(searchQuery) ||
+                u.username.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        }
+
+        return View("Userlist", others); // Pass filtered or full list to the view
     }
+
     public async Task<IActionResult> Details(int id)
     {
         var user = await _context.Users.FindAsync(id);

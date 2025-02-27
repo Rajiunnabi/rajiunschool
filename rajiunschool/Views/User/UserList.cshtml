@@ -2,83 +2,152 @@
 
 @{
     String UserListnow = ViewData["UserListnow"] as string;
-    bool showButton = (UserListnow == "Teacher" || UserListnow == "Student"); // Check if user is Teacher or Student
+    bool showButton = (UserListnow == "Teacher" || UserListnow == "Student"); // Show button for Teacher & Student
 }
-    <style>
-        .container {
+
+<style>
+    .container {
         margin-top: 50px;
         position: relative;
-        }
+    }
 
-        .top-right-btn {
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin: 10px;
-        }
-
-        table {
+    table {
         width: 100%;
         border-collapse: collapse;
-        }
+    }
 
-        th, td {
+    th, td {
         padding: 10px;
         border: 1px solid #ddd;
         text-align: center;
-        }
+    }
 
-        th {
+    th {
         background-color: #007bff;
         color: white;
-        }
+    }
 
-        .btn-danger, .btn-primary {
+    .btn-danger, .btn-primary {
         padding: 5px 10px;
         text-decoration: none;
         color: white;
         border-radius: 5px;
-        }
+    }
 
-        .btn-danger {
+    .btn-danger {
         background-color: red;
-        }
+    }
 
-        .btn-primary {
+    .btn-primary {
         background-color: #007bff;
+    }
+
+    .search-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 300px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .search-button {
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .search-button:hover {
+            background-color: #0056b3;
         }
-    </style>
 
-    <div class="container">
-        <!-- Show button only if user is a Teacher or Student -->
-        @if (showButton)
-        {
-        <a href="@Url.Action("nextPage", "User",new {UserListnow=UserListnow})" class="btn btn-success top-right-btn">Go To Next Page</a>
+    .reset-button {
+        padding: 8px 15px;
+        background-color: gray;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-left: 10px;
+    }
+
+        .reset-button:hover {
+            background-color: darkgray;
         }
 
-        <h2 class="text-center mb-4">User List</h2>
+    .next-page-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 10px;
+    }
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Department</th>
-                    <th>Action</th>
-                    <th>Profile</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model)
+    .next-page-button {
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+        .next-page-button:hover {
+            background-color: #218838;
+        }
+</style>
+
+<div class="container">
+    <h2 class="text-center mb-4">Manage Students</h2>
+
+    @if (showButton)
+    {
+        <div class="next-page-container">
+            <a href="@Url.Action("nextPage", "User", new { UserListnow = UserListnow })" class="next-page-button">Go to Next Page</a>
+        </div>
+    }
+
+    <!-- Search Bar (For Students, Teachers, Bankers, Librarians, and Others) -->
+    @if (UserListnow == "Student" || UserListnow == "Teacher" || UserListnow == "Banker" || UserListnow == "Libarian" || UserListnow == "Others")
+    {
+        <div class="search-container">
+            <form method="get" action="@Url.Action(UserListnow, "User")">
+                <input type="text" name="searchQuery" class="search-input" placeholder="Search by @UserListnow ID or Username" />
+                <button type="submit" class="search-button">Search</button>
+                <a href="@Url.Action(UserListnow, "User")" class="reset-button">Reset</a>
+            </form>
+        </div>
+    }
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Department</th>
+                <th>Action</th>
+                <th>Profile</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                if (user.role.Equals(UserListnow))
                 {
-                    if (user.role.Equals(UserListnow))
-                    {
-                        <tr>
+                    <tr>
                         <td>@user.id</td>
                         <td>@user.username</td>
                         <td>@user.role</td>
                         <td>
-                            <a href="@Url.Action("Delete", "CrudTable", new { id = user.id})" class="btn btn-danger">Delete</a>
+                            <a href="@Url.Action("Delete", "CrudTable", new { id = user.id, UserListnow = UserListnow })" class="btn btn-danger">Delete</a>
                         </td>
                         <td>
                             <a href="@Url.Action("Details", "User", new { id = user.id })" class="btn btn-primary">View Profile</a>

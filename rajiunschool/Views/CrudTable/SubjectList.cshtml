@@ -43,11 +43,59 @@
     .btn-primary {
         background-color: #007bff;
     }
+
+    .search-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 300px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .search-button {
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+
+    .reset-button {
+        padding: 8px 15px;
+        background-color: gray;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-left: 10px;
+    }
+
+        .reset-button:hover {
+            background-color: darkgray;
+        }
 </style>
 
 <div class="container">
+    <h2 class="text-center mb-4">Subject List</h2>
 
-    <h2 class="text-center mb-4">User List</h2>
+    <!-- Search Bar -->
+    <div class="search-container">
+        <form method="get" action="@Url.Action("SubjectList", "CrudTable")">
+            <input type="text" name="searchQuery" class="search-input" placeholder="Search by Subject ID or Name" />
+            <button type="submit" class="search-button">Search</button>
+            <a href="@Url.Action("SubjectList", "CrudTable")" class="reset-button">Reset</a>
+        </form>
+    </div>
 
     <table class="table table-bordered">
         <thead>
@@ -86,5 +134,3 @@
         </tbody>
     </table>
 </div>
-
-

@@ -11,7 +11,7 @@ using rajiunschool.data;
 namespace rajiunschool.Migrations
 {
     [DbContext(typeof(UmanagementContext))]
-    [Migration("20250226182850_init")]
+    [Migration("20250227154308_init")]
     partial class init
     {
         /// <inheritdoc />

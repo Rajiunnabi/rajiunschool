@@ -128,12 +128,27 @@ namespace rajiunschool.Controllers
                 return View();
             }
         }
-        public IActionResult SubjectList()
+        public IActionResult SubjectList(string searchQuery)
         {
-            var subjectlist = _context.SubjectLists.ToList();
+            var subjects = _context.SubjectLists.AsQueryable(); // Queryable for efficient filtering
 
-            return View(subjectlist);
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                if (int.TryParse(searchQuery, out int subjectId))
+                {
+                    // If the input is a number, search by Subject ID
+                    subjects = subjects.Where(s => s.id == subjectId);
+                }
+                else
+                {
+                    // If the input is text, search by Subject Name
+                    subjects = subjects.Where(s => s.subjectname.Contains(searchQuery));
+                }
+            }
+
+            return View(subjects.ToList()); // Pass filtered or full list to the view
         }
+
 
 
         public async Task<IActionResult> DeleteSubject(int id)
@@ -190,35 +205,49 @@ namespace rajiunschool.Controllers
             }
         }
 
-        public IActionResult SubjectRequest()
+        public IActionResult SubjectRequest(string searchQuery)
         {
             var subjectrequests = _context.SubjectRequests.ToList();
 
             // Initialize the list to store the extended data
             List<subjectrequestextend> SubjectRequestExtend = new List<subjectrequestextend>();
 
-            // Create a list to store the related Subject data
             foreach (var subjectrequest in subjectrequests)
             {
                 // Fetch the related subject data using the id
                 var subject = _context.SubjectLists.FirstOrDefault(s => s.id == subjectrequest.subjectid);
+
                 // Create a new object of subjectrequestextend
                 var extendedSubjectRequest = new subjectrequestextend
                 {
-                    subject = subject,        // Set the related subject
-                    teacherid = subjectrequest.teacherid// Set the teacher id from the subjectrequest
+                    subject = subject, // Set the related subject
+                    teacherid = subjectrequest.teacherid // Set the teacher ID from the subject request
                 };
 
                 // Add the extended data to the list
                 SubjectRequestExtend.Add(extendedSubjectRequest);
             }
 
-            // Return the view with the extended data
+            // Apply search filtering
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                if (int.TryParse(searchQuery, out int subjectId))
+                {
+                    // If the input is a number, search by Subject ID
+                    SubjectRequestExtend = SubjectRequestExtend
+                        .Where(sr => sr.subject != null && sr.subject.id == subjectId)
+                        .ToList();
+                }
+                else
+                {
+                    // If the input is text, search by Subject Name
+                    SubjectRequestExtend = SubjectRequestExtend
+                        .Where(sr => sr.subject != null && sr.subject.subjectname.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                }
+            }
+
             return View(SubjectRequestExtend);
         }
-
-
-
-
     }
 }
