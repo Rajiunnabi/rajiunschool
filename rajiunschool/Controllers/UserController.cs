@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using rajiunschool.data;
@@ -132,4 +133,6 @@ public class UserController : Controller
          return View("nextPageStudent");
     }
 
-}
+   
+
+    }

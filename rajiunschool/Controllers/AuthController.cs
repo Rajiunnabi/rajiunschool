@@ -7,6 +7,7 @@ namespace rajiunschool.Controllers
     using System.Linq;
     using rajiunschool.data;
     using static System.Runtime.InteropServices.JavaScript.JSType;
+    using Microsoft.EntityFrameworkCore;
 
     public class AuthController : Controller
     {
@@ -25,16 +26,19 @@ namespace rajiunschool.Controllers
 
         // POST: Process Login
         [HttpPost]
-        public IActionResult Login(string username, string password)
+        public async Task<IActionResult> Login(string username, string password)
         {
             var user = _context.Users.FirstOrDefault(u => u.username == username && u.password == password);
-            
+            var session = await _context.Session
+                    .OrderByDescending(s => s.id)
+                    .FirstOrDefaultAsync();
+            HttpContext.Session.SetString("currsession", session.name);
 
             if (user != null)
             {
                 // Store session variables
                 HttpContext.Session.SetString("UserRole", user.role);
-                HttpContext.Session.SetInt32("UserId", user.id);
+                HttpContext.Session.SetInt32("userid", user.id);
 
                 // Role-based redirection
                 return RedirectToAction("Dashboard", "Dashboard");
@@ -49,13 +53,13 @@ namespace rajiunschool.Controllers
                     {
                         // Store session variables
                         HttpContext.Session.SetString("UserRole", user1.role);
-                        HttpContext.Session.SetInt32("UserId", user1.id);
+                        HttpContext.Session.SetInt32("userid", user1.id);
 
                         // Role-based redirection
                         return RedirectToAction("Dashboard", "Dashboard");
                     }
                 }
-                
+
             }
 
             ViewBag.Error = "Invalid Username or Password";

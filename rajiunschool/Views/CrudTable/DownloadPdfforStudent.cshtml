@@ -1,0 +1,17 @@
+﻿@model paymentviewforstudent
+
+@{
+    ViewData["Title"] = "Student Fee Details";
+}
+
+<h2>Student Fee Details</h2>
+
+<div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+    <p><strong>Student ID:</strong> @Model.studentid</p>
+    <p><strong>Tuition Fee:</strong> @Model.tutionfee</p>
+    <p><strong>Admission Fee:</strong> @Model.addmissionfee</p>
+    <p><strong>Transportation Fee:</strong> @Model.transportationfee</p>
+    <p><strong>Session:</strong> @Model.session</p>
+</div>
+
+<a href="@Url.Action("DownloadPdfforStudent", "CrudTable", new { id = Model.studentid })" class="btn btn-primary">Download PDF</a>

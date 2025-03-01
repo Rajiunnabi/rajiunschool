@@ -8,6 +8,7 @@
         public IActionResult Dashboard()
         {
             var role = HttpContext.Session.GetString("UserRole");
+           // var id = HttpContext.Session.SetString("StudentId", student.studentid);
 
             if (string.IsNullOrEmpty(role))
             {

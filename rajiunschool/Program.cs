@@ -11,9 +11,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache(); // Session storage
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromDays(10);  // Session timeout (30 minutes)
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromDays(10);  // Session timeout (10 days)
+    options.Cookie.HttpOnly = true; // Make the session cookie HTTP-only
+    options.Cookie.IsEssential = true; // Mark the session cookie as essential
+    options.Cookie.Name = "StudentSession"; // Custom session cookie name
 });
 
 // Configure the database context
@@ -29,14 +30,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseSession(); // Add session middleware to the pipeline
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession(); // Add session middleware to the pipeline
 
 app.MapControllerRoute(
     name: "default",
