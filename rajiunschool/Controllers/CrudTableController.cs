@@ -261,14 +261,15 @@ namespace rajiunschool.Controllers
             int? id= HttpContext.Session.GetInt32("userid");
             string cursession= HttpContext.Session.GetString("currsession");
             var studentinfo = await _context.PaymentViewForStudents
-               .FirstOrDefaultAsync(s => s.studentid == id && s.session==cursession);
+               .FirstOrDefaultAsync(s => s.studentid == id && s.session==cursession && s.status=="Due");
             return View("DownloadPdfforStudent",studentinfo);
         }
         public async Task<IActionResult> DownloadPdfforStudent(int id)
         {
             // Fetch the student information by ID
+            string cursession = HttpContext.Session.GetString("currsession");
             var studentinfo = await _context.PaymentViewForStudents
-                .FirstOrDefaultAsync(s => s.studentid == id);
+                .FirstOrDefaultAsync(s => s.studentid == id && s.session==cursession && s.status=="Due");
 
             // Check if the student exists
             if (studentinfo == null)
@@ -365,12 +366,12 @@ namespace rajiunschool.Controllers
         }
         public async Task<IActionResult> PaymentStatusUpdate(string searchQuery)
         {
-            // Start with the base query
-            var query = _context.PaymentViewForStudents
+            
+                // Filter by transictionid
+                  var query = _context.PaymentViewForStudents
                     .AsQueryable()
-                    .Where(s => s.transictionid==searchQuery);
+                    .Where(s => s.transictionid == searchQuery);
 
-            Console.WriteLine($"User Role:, User ID:{searchQuery}");
 
 
             // Get the first matching record
@@ -391,6 +392,46 @@ namespace rajiunschool.Controllers
 
             // Pass the updated list to the view
             return View("BankerUpdatePayment", studentinfo);
+        }
+
+        public IActionResult AddPaymentforStudent()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPaymentforStudent(int admissionfee,int tutionfee,int transportationfee,String department)
+        {
+            try
+            {
+                var users= _context.ProfileStudents
+            .Where(u => u.dept == department)
+            .ToList();
+             foreach(var user in users)
+                {
+                    var payment = new paymentviewforstudent();
+                    payment.session= HttpContext.Session.GetString("currsession");
+                    payment.studentid = user.profileid;
+                    payment.addmissionfee = admissionfee;
+                    payment.tutionfee = tutionfee;
+                    payment.transportationfee = transportationfee;
+                    string randomstring = RandomStringGenerator.GenerateRandomString(12);
+                    payment.transictionid = randomstring;
+                    payment.status = "Due";
+                    _context.PaymentViewForStudents.Add(payment);
+                    _context.SaveChanges();
+
+
+                }
+                TempData["SuccessMessage"] = "Subject added successfully!";
+                return RedirectToAction("Dashboard", "Dashboard");
+            }
+            catch
+            {
+                ViewBag.Error = "An error occurred while adding the subject.";
+                return View();
+                
+            }
         }
 
 
