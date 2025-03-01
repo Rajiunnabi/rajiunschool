@@ -297,6 +297,7 @@ namespace rajiunschool.Controllers
                 document.Add(new Paragraph($"Admission Fee: {studentinfo.addmissionfee}"));
                 document.Add(new Paragraph($"Transportation Fee: {studentinfo.transportationfee}"));
                 document.Add(new Paragraph($"Session: {studentinfo.session}"));
+                document.Add(new Paragraph($"Transicionid: {studentinfo.transictionid}"));
 
                 // Add a separator for better readability
                 document.Add(new Paragraph("--------------------------------------------------")
