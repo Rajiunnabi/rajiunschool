@@ -114,11 +114,11 @@ namespace rajiunschool.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     studentid = table.Column<int>(type: "int", nullable: false),
                     punishmentfee = table.Column<int>(type: "int", nullable: false),
-                    transictionid = table.Column<int>(type: "int", nullable: false),
-                    status = table.Column<int>(type: "int", nullable: false),
+                    transictionid = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     tutionfee = table.Column<int>(type: "int", nullable: false),
                     addmissionfee = table.Column<int>(type: "int", nullable: false),
-                    session = table.Column<int>(type: "int", nullable: false),
+                    session = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     transportationfee = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

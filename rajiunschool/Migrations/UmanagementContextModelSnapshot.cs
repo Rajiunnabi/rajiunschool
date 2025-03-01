@@ -193,8 +193,9 @@ namespace rajiunschool.Migrations
                     b.Property<int>("punishmentfee")
                         .HasColumnType("int");
 
-                    b.Property<int>("session")
-                        .HasColumnType("int");
+                    b.Property<string>("session")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("status")
                         .IsRequired()
@@ -203,8 +204,9 @@ namespace rajiunschool.Migrations
                     b.Property<int>("studentid")
                         .HasColumnType("int");
 
-                    b.Property<int>("transictionid")
-                        .HasColumnType("int");
+                    b.Property<string>("transictionid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("transportationfee")
                         .HasColumnType("int");

@@ -11,7 +11,7 @@ using rajiunschool.data;
 namespace rajiunschool.Migrations
 {
     [DbContext(typeof(UmanagementContext))]
-    [Migration("20250227154308_init")]
+    [Migration("20250301165427_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -196,17 +196,20 @@ namespace rajiunschool.Migrations
                     b.Property<int>("punishmentfee")
                         .HasColumnType("int");
 
-                    b.Property<int>("session")
-                        .HasColumnType("int");
+                    b.Property<string>("session")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("status")
-                        .HasColumnType("int");
+                    b.Property<string>("status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("studentid")
                         .HasColumnType("int");
 
-                    b.Property<int>("transictionid")
-                        .HasColumnType("int");
+                    b.Property<string>("transictionid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("transportationfee")
                         .HasColumnType("int");
