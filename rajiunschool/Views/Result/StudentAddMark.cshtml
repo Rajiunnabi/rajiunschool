@@ -1,0 +1,72 @@
+﻿@model currentcoursemark
+
+@{
+    ViewData["Title"] = "Enter Student Marks";
+}
+
+<h2>Enter Student Marks</h2>
+
+<form asp-action="StudentAddMarkAdd" asp-controller="Result" method="post">
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+				<th>Subject ID</th>
+                <th>Student ID</th>
+                <th>Quiz 1</th>
+                <th>Quiz 2</th>
+                <th>Quiz 3</th>
+                <th>Quiz 4</th>
+                <th>Attendance</th>
+                <th>Final Exam</th>
+                <th>Session</th>
+                <th>Total Marks</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="number" class="form-control" asp-for="subjectid" required /></td>
+                <td><input type="number" class="form-control" asp-for="studentid" required /></td>
+                <td><input type="number" class="form-control" asp-for="quiz1" required /></td>
+                <td><input type="number" class="form-control" asp-for="quiz2" required /></td>
+                <td><input type="number" class="form-control" asp-for="quiz3" required /></td>
+                <td><input type="number" class="form-control" asp-for="quiz4" required /></td>
+                <td><input type="number" class="form-control" asp-for="attendance" required /></td>
+                <td><input type="number" class="form-control" asp-for="final" required /></td>
+                <td><input type="text" class="form-control" asp-for="session" required /></td>
+                <td class="align-middle text-muted">Auto-Calculated</td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Calculate & Save</button>
+</form>
+
+@if (Model != null)
+{
+    <h3 class="mt-4">All Student Marks</h3>
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Quiz 1</th>
+                <th>Quiz 2</th>
+                <th>Quiz 3</th>
+                <th>Quiz 4</th>
+                <th>Attendance</th>
+                <th>Final Exam</th>
+                <th>Total Marks</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.studentid</td>
+                <td>@Model.quiz1</td>
+                <td>@Model.quiz2</td>
+                <td>@Model.quiz3</td>
+                <td>@Model.quiz4</td>
+                <td>@Model.attendance</td>
+                <td>@Model.final</td>
+                <td class="fw-bold text-success">@Model.totalmarks</td>
+            </tr>
+        </tbody>
+    </table>
+}

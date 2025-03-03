@@ -13,5 +13,6 @@ namespace rajiunschool.Models
         public int attendance { get; set; }
 
         public int final { get; set; }
+        public string session {  get; set; }
     }
 }

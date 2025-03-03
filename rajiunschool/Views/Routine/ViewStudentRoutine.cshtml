@@ -1,0 +1,20 @@
+﻿@model routine
+
+@{
+    ViewData["Title"] = "View Routine";
+}
+
+<h2>Your Routine</h2>
+
+@if (Model != null)
+{
+    <p>
+        <strong>Department:</strong> @Model.dept <br />
+		<strong>Semester:</strong> @Model.semester <br />
+    </p>
+    <a href="/@Model.FilePath" target="_blank" class="btn btn-primary">View Routine (PDF)</a>
+}
+else
+{
+    <p class="text-danger">@ViewBag.Message</p>
+}

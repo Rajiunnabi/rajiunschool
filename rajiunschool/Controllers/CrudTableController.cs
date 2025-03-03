@@ -553,6 +553,12 @@ namespace rajiunschool.Controllers
             return View(teacherevaluationextend);
         }
 
+        //Create a method name baba
+        public IActionResult baba()
+        {
+            return View();
+        }
+
 
 
     }

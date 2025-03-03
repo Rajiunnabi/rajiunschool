@@ -1,0 +1,36 @@
+﻿@model List<routine>
+
+@{
+    ViewData["Title"] = "Manage Routine";
+}
+
+<h2>Manage Routine</h2>
+
+<p>
+    <a asp-action="UploadRoutine" asp-controller="Routine" class="btn btn-primary">Upload New Routine</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Department</th>
+            <th>Semester</th>
+            <th>File Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.dept</td>
+                <td>@item.semester</td>
+                <td>@item.FileName</td>
+                <td>
+                    <a href="/@item.FilePath" target="_blank" class="btn btn-info">View</a>
+                    <a asp-action="DeleteRoutine" asp-route-id="@item.id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

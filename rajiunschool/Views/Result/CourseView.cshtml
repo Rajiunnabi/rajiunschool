@@ -1,0 +1,33 @@
+﻿<div class="container">
+    <h2 class="text-center mb-4">Subject List</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Subject ID</th>
+                <th>Subject Name</th>
+                <th>Students</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var subjectlist in Model)
+            {
+                <tr>
+                    <td>@subjectlist.id</td>
+                    <td>@subjectlist.subjectname</td>
+                    <td>
+                        <form asp-action="CourseViewStudent" asp-controller="Result" method="post">
+                            <input type="hidden" name="id" value="@subjectlist.id" />
+                            <input type="hidden" name="subjectname" value="@subjectlist.subjectname" />
+                            <input type="hidden" name="dept" value="@subjectlist.dept" />
+                            <input type="hidden" name="semester" value="@subjectlist.semester" />
+                            <input type="hidden" name="instructor" value="@subjectlist.instructor" />
+                            <input type="hidden" name="takaperclass" value="@subjectlist.takaperclass" />
+                            <button type="submit" class="btn btn-primary">View</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

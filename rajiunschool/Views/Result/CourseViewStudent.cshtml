@@ -1,0 +1,34 @@
+﻿@model List<profilestudent>
+
+<style>
+    /* Your existing CSS styles */
+</style>
+
+<div class="container">
+    <h2 class="text-center mb-4">Subject List</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Student Name</th>
+                <th>Add Mark</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.profileid</td>
+                    <td>@student.name</td>
+                    <td>
+                        <form asp-action="StudentAddMark" asp-controller="Result" method="get">
+                            <input type="hidden" name="profileid" value="@student.profileid" />
+                            <button type="submit" class="btn btn-primary">View</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
