@@ -8,8 +8,8 @@ namespace rajiunschool.Models
         [Key]
         public int hudao { get; set; }
         public int teacherid { get; set; }
-        public string dept { get; set; }
         public int subjectid {  get; set; }
+        public int studentid { get; set; }
         public string details { get; set; }
 
     }

@@ -7,10 +7,9 @@ namespace rajiunschool.Models
     {
         [Key]
         public int hudao { get; set; }
-        public int teacher { get; set; }
-        public string dept { get; set; }
-        public string sem { get; set; }
-        public int session { get; set; }
+        public int teacherid { get; set; }
+        public int subjectid { get; set; }
+        public string session { get; set; }
         public int classtaken { get; set; }
     }
 }

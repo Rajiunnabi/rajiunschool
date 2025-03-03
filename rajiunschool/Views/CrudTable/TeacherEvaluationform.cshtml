@@ -1,0 +1,75 @@
+﻿@model teacherevaluationlist
+
+@{
+    string subjectname = Model.subjectname;
+    string instructor = Model.teachername;
+    ViewData["Title"] = subjectname;
+}
+
+<style>
+    body {
+        background: #f4f4f4;
+    }
+
+    .form-container {
+        max-width: 500px;
+        margin: 50px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control {
+        border-radius: 5px;
+    }
+
+    .btn-success {
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    .alert-success, .alert-danger {
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <div class="form-container">
+        <h3 class="text-center mb-4">@Model.subjectname</h3>
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">@ViewBag.Message</div>
+        }
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+
+                @if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-success">@ViewBag.Message</div>
+                }
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+                }
+
+                <form asp-action="TeacherEvaluationformadd" asp-controller="CrudTable" method="post" enctype="multipart/form-data">
+                    <!-- Hidden fields for model properties with values -->
+                    <input type="hidden" asp-for="subjectid" value="@Model.subjectid" />
+                    <input type="hidden" asp-for="subjectname" value="@Model.subjectname" />
+                    <input type="hidden" asp-for="teachername" value="@Model.teachername" />
+                    <input type="hidden" asp-for="teacherid" value="@Model.teacherid" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Details</label>
+                        <input type="text" name="Details" class="form-control" placeholder="Enter Your Details About The Teacher" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Evaluate</button>
+                </form>
+    </div>
+</div>

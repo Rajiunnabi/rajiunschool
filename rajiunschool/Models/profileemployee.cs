@@ -20,6 +20,7 @@ namespace rajiunschool.Models
         public string? details { get; set; }
         public string dept { get; set; }
         public string? ProfilePicture { get; set; }
+        public string session { get; set; }
 
     }
 }

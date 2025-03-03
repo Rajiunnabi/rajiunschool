@@ -15,9 +15,9 @@ namespace rajiunschool.Models
         public string semester { get; set; }
 
         public string admittedsemester { get; set; }
-
         public string labclearancestatus { get; set; }
         public string? ProfilePicture { get; set; }
+        public string session { get; set; }
 
     }
 }

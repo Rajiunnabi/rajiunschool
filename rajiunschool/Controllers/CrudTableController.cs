@@ -16,6 +16,7 @@ using iText.Layout.Element;
 using iText.Layout.Properties;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using Microsoft.AspNetCore.Identity;
+using iText.StyledXmlParser.Node;
 
 namespace rajiunschool.Controllers
 {
@@ -80,17 +81,12 @@ namespace rajiunschool.Controllers
                     role = model.SelectedOption,
                     password = Password
                 };
-                var session = await _context.Session
-                    .OrderByDescending(s => s.id)
-                    .FirstOrDefaultAsync();
+                var session = HttpContext.Session.GetString("currsession");
                 _context.Users.Add(newUser);
                 await _context.SaveChangesAsync();
                 var lastuser = await _context.Users
                    .OrderByDescending(s => s.id)
                    .FirstOrDefaultAsync();
-
-                Console.WriteLine($"User found: {lastuser.id}");
-                Console.WriteLine($"User found: {session.name}");
                 if (model.SelectedOption.Equals("Student"))
                 {
                     var newProfile = new profilestudent
@@ -99,9 +95,10 @@ namespace rajiunschool.Controllers
                         name = Username,
                         dept = Dept,
                         semester = "1.1",
-                        admittedsemester = session.name,
+                        admittedsemester = session,
                         labclearancestatus = "NO DUE",
-                        ProfilePicture = null
+                        ProfilePicture = null,
+                        session=session
 
                     };
                     _context.ProfileStudents.Add(newProfile);
@@ -116,7 +113,8 @@ namespace rajiunschool.Controllers
                         dept = Dept,
                         joindate = DateTime.Now.ToString("MMMM yyyy"),
                         profileid = lastuser.id,
-                        ProfilePicture = null
+                        ProfilePicture = null,
+                        session=session
 
 
                     };
@@ -369,8 +367,7 @@ namespace rajiunschool.Controllers
             
                 // Filter by transictionid
                   var query = _context.PaymentViewForStudents
-                    .AsQueryable()
-                    .Where(s => s.transictionid == searchQuery);
+                .Where(s => s.transictionid == searchQuery);
 
 
 
@@ -380,18 +377,16 @@ namespace rajiunschool.Controllers
             if (paymentRecord != null)
             {
                 // Update the status to "Payment completed"
-                Console.WriteLine($"User Role: {paymentRecord.transictionid}, User ID: {paymentRecord.status}");
                 paymentRecord.status = "Payment completed";
 
                 // Save the changes to the database
                 _context.SaveChanges();
             }
-
+            return RedirectToAction("BankerUpdatePayment", "CrudTable");
             // Fetch the updated list of records (after saving changes)
-            var studentinfo = query.ToList();
 
             // Pass the updated list to the view
-            return View("BankerUpdatePayment", studentinfo);
+
         }
 
         public IActionResult AddPaymentforStudent()
@@ -434,6 +429,129 @@ namespace rajiunschool.Controllers
             }
         }
 
+        public async Task<IActionResult> AddSubjecttoTeacher(int subjectid,int teacherid)
+        {
+
+            // Filter by transictionid
+           string cursession = HttpContext.Session.GetString("currsession");
+          var teachersubjectadd = new teachercourseview();
+            teachersubjectadd.subjectid = subjectid;
+            teachersubjectadd.teacherid = teacherid;
+            teachersubjectadd.session = cursession;
+            _context.TeacherCourseViews.Add(teachersubjectadd);
+            _context.SaveChanges();
+            var subjectRequest = _context.SubjectRequests
+    .FirstOrDefault(s => s.subjectid == subjectid && s.teacherid == teacherid);
+            var subject = _context.SubjectLists
+    .FirstOrDefault(s => s.id == subjectid);
+            if (subjectRequest != null)
+            {
+                // Remove the entity
+                _context.SubjectRequests.Remove(subjectRequest);
+
+                // Save changes to the database
+                _context.SaveChanges();
+            }
+            if (subject != null)
+            {
+                // Update the instructor field
+                subject.instructor = teacherid;
+                // Save changes to the database
+                _context.SaveChanges();
+            }
+            //Create a list of subjectrequestextend class
+            return RedirectToAction("SubjectRequest", "CrudTable");
+
+
+        }
+
+        public IActionResult TeacherEvaluation()
+        {
+            profilestudent student = _context.ProfileStudents.FirstOrDefault(s => s.profileid == HttpContext.Session.GetInt32("userid"));
+            List<subjectlist> subjects = _context.SubjectLists.Where(s=> s.semester == student.semester && s.dept == student.dept && s.instructor!=null).ToList();
+            List<teacherevaluation> teacherevaluations = _context.Teacherevaluations.Where(s => s.studentid == student.profileid).ToList();
+
+            List<teacherevaluationlist> evaluationList = new List<teacherevaluationlist>();
+
+            foreach (var subject in subjects)
+            {
+                int flag = 0;
+                foreach (var evaluation in teacherevaluations)
+                {
+                    if (evaluation.subjectid == subject.id)
+                    {
+                        flag = 1;
+                        break;
+                    }
+
+                }
+                if (flag == 0)
+                {
+                    teacherevaluationlist teacherevaluationlist = new teacherevaluationlist();
+                    teacherevaluationlist.subjectid = subject.id;
+                    teacherevaluationlist.subjectname = subject.subjectname;
+                    string teachername = _context.ProfileEmployees.FirstOrDefault(s => s.profileid == subject.instructor).name;
+                    teacherevaluationlist.teachername = teachername;
+                    teacherevaluationlist.teacherid = subject.instructor;
+                    evaluationList.Add(teacherevaluationlist);
+                    Console.WriteLine( $"{teacherevaluationlist.subjectname}");
+                }
+            }
+            return View(evaluationList);
+        }
+
+        public IActionResult TeacherEvaluationform(int subjectid,string subjectname,string teachername,int teacherid)
+        {
+            teacherevaluationlist evaluation = new teacherevaluationlist();
+            evaluation.subjectid = subjectid;
+            evaluation.subjectname = subjectname;
+            evaluation.teachername = teachername;
+            evaluation.teacherid = teacherid;
+            Console.WriteLine($"{evaluation.subjectid} , {evaluation.subjectname} , {evaluation.teacherid} , {evaluation.teachername}");
+            return View(evaluation);
+        }
+        //Make a post method of TeacherEvaluationform
+        public async Task<IActionResult> TeacherEvaluationformadd(int subjectid, string subjectname, string teachername, int teacherid, string details)
+        {
+            Console.WriteLine($"{subjectid} , {subjectname} , {teacherid} , {teachername}");
+
+            try
+            {
+                var newEvaluation = new teacherevaluation
+                {
+                    studentid = (int)HttpContext.Session.GetInt32("userid"),
+                    subjectid = subjectid,
+                    teacherid = teacherid,
+                    details = details
+                };
+
+                _context.Teacherevaluations.Add(newEvaluation);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Evaluation added successfully!";
+                return RedirectToAction("TeacherEvaluation", "CrudTable");
+            }
+            catch
+            {
+                ViewBag.Error = "An error occurred while adding the evaluation.";
+                Console.WriteLine("Error occurred during evaluation.");
+                return RedirectToAction("TeacherEvaluation", "CrudTable");
+            }
+        }
+        public IActionResult CourseReview()
+        {
+            var evaluations = _context.Teacherevaluations.Where(s => s.teacherid == HttpContext.Session.GetInt32("userid")).ToList();
+            var teacherevaluationextend = new List<teacherevaluationextend>();
+            foreach(var evaluation in evaluations)
+            {
+                var subject = _context.SubjectLists.FirstOrDefault(s => s.id == evaluation.subjectid);
+                var evaluationextend = new teacherevaluationextend();
+                evaluationextend.subjectname = subject.subjectname;
+                evaluationextend.subjectid = subject.id;
+                evaluationextend.details = evaluation.details;
+                teacherevaluationextend.Add(evaluationextend);
+            }
+            return View(teacherevaluationextend);
+        }
 
 
 

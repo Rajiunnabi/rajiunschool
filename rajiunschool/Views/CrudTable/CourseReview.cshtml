@@ -1,4 +1,4 @@
-﻿@model List<subjectrequestextend>
+﻿@model List<teacherevaluationextend>
 
 <style>
     .container {
@@ -83,43 +83,82 @@
         .reset-button:hover {
             background-color: darkgray;
         }
+
+    /* Modal Styles */
+    #detailsModal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    #overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
 </style>
 
 <div class="container">
-    <h2 class="text-center mb-4">Subject Requests</h2>
-
-    <!-- Search Bar -->
-    <div class="search-container">
-        <form method="get" action="@Url.Action("SubjectRequest", "CrudTable")">
-            <input type="text" name="searchQuery" class="search-input" placeholder="Search by Subject ID or Name" />
-            <button type="submit" class="search-button">Search</button>
-            <a href="@Url.Action("SubjectRequest", "CrudTable")" class="reset-button">Reset</a>
-        </form>
-    </div>
+    <h2 class="text-center mb-4">Course Review</h2>
 
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Subject ID</th>
-                <th>Instructor</th>
-                <th>View Profile</th>\
-				<th>Action</th>
+                <th>Subject Name</th>
+                <th>Details</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var subjectrequest in Model)
+            @foreach (var coursereview in Model)
             {
                 <tr>
-                    <td>@subjectrequest.subject.id</td>
-                    <td>@subjectrequest.teacherid</td>
+                    <td>@coursereview.subjectid</td>
+                    <td>@coursereview.subjectname</td>
                     <td>
-                        <a href="@Url.Action("Details", "User", new { id = subjectrequest.teacherid })" class="btn btn-primary">View Profile</a>
-                    </td>
-                    <td>
-                        <a href="@Url.Action("AddSubjecttoTeacher", "CrudTable", new { subjectid=subjectrequest.subject.id,teacherid = subjectrequest.teacherid })" class="btn btn-primary">Accept</a>
+                        <button class="btn-details" onclick="openModal('@coursereview.details')">
+                            View Details
+                        </button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+<!-- Modal -->
+<div id="detailsModal">
+    <h3>Details</h3>
+    <p id="modal-body"></p>
+    <button onclick="closeModal()">Close</button>
+</div>
+
+<!-- Overlay -->
+<div id="overlay"></div>
+
+<script>
+    function openModal(details) {
+        // Display the details in the modal
+        document.getElementById('modal-body').innerText = details;
+        document.getElementById('detailsModal').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    }
+
+    function closeModal() {
+        // Hide the modal and overlay
+        document.getElementById('detailsModal').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+</script>
