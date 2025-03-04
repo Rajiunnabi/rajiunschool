@@ -147,7 +147,7 @@
                         <td>@user.username</td>
                         <td>@user.role</td>
                         <td>
-                            <a href="@Url.Action("Delete", "CrudTable", new { id = user.id, UserListnow = UserListnow })" class="btn btn-danger">Delete</a>
+                            <a href="@Url.Action("DeleteUser", "CrudTable", new { id = user.id, UserListnow = UserListnow })" class="btn btn-danger">Delete</a>
                         </td>
                         <td>
                             <a href="@Url.Action("Details", "User", new { id = user.id })" class="btn btn-primary">View Profile</a>

@@ -34,7 +34,7 @@ namespace rajiunschool.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -253,6 +253,21 @@ namespace rajiunschool.Controllers
             }
 
             return View(SubjectRequestExtend);
+        }
+        public async Task<IActionResult> DeleteSubjectRequest(int subjectid, int teacherid)
+        {
+            Console.WriteLine("VAi Matro method da dhuklam");
+            var subjectRequest = _context.SubjectRequests
+                .FirstOrDefault(s => s.subjectid == subjectid && s.teacherid == teacherid);
+            Console.WriteLine(subjectRequest.teacherid);
+            if (subjectRequest != null)
+            {
+                // Remove the entity
+                _context.SubjectRequests.Remove(subjectRequest);
+                // Save changes to the database
+                _context.SaveChanges();
+            }
+            return RedirectToAction("SubjectRequest", "CrudTable");
         }
         public async Task<IActionResult> ViewPdfforStudent()
         {
@@ -553,11 +568,65 @@ namespace rajiunschool.Controllers
             return View(teacherevaluationextend);
         }
 
-        //Create a method name baba
-        public IActionResult baba()
+        // make a method name seeSubjectlistForTeacher
+        public IActionResult SeeSubjectListForTeacher(int SearchQuery)
         {
-            return View();
+            var teacherid = HttpContext.Session.GetInt32("userid");
+            if (teacherid == null)
+            {
+                // Handle the case where teacherid is null (e.g., redirect to login)
+                return RedirectToAction("Login", "Account");
+            }
+
+            var profile = _context.ProfileEmployees.FirstOrDefault(s => s.profileid == teacherid);
+            if (profile == null)
+            {
+                // Handle the case where the profile is not found
+                return NotFound("Profile not found.");
+            }
+
+            var subjects = _context.SubjectLists
+                                   .Where(s => s.dept == profile.dept && s.instructor == null)
+                                   .ToList();
+
+            var subjectRequests = _context.SubjectRequests
+                                          .Where(s => s.teacherid == teacherid)
+                                          .ToList();
+
+            var subjectAvailableToRequest = new List<subjectlist>();
+
+            foreach (var subject in subjects)
+            {
+                var entity = subjectRequests.FirstOrDefault(s => s.subjectid == subject.id);
+                if (entity == null)
+                {
+                    subjectAvailableToRequest.Add(subject);
+                }
+            }
+
+            if (SearchQuery != 0)
+            {
+                subjectAvailableToRequest = subjectAvailableToRequest
+                                            .Where(s => s.id == SearchQuery)
+                                            .ToList();
+            }
+
+            return View(subjectAvailableToRequest);
         }
+
+        public async Task<IActionResult> ApplyForSubject(int subjectid)
+        {
+            var subjectRequest = new subjectrequest();
+            subjectRequest.subjectid = subjectid;
+            subjectRequest.teacherid = (int)HttpContext.Session.GetInt32("userid");
+            _context.SubjectRequests.Add(subjectRequest);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("SeeSubjectListForTeacher", "CrudTable");
+        }
+
+        
+      
+
 
 
 
