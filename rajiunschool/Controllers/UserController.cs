@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -7,10 +8,11 @@ using rajiunschool.Models;
 public class UserController : Controller
 {
     private readonly UmanagementContext _context;
-
-    public UserController(UmanagementContext context)
+    private readonly IWebHostEnvironment _webHostEnvironment;
+    public UserController(UmanagementContext context, IWebHostEnvironment webHostEnvironment)
     {
         _context = context;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     // GET: Display users in a table
@@ -116,23 +118,152 @@ public class UserController : Controller
         {
             var profile= await _context.ProfileStudents.FirstOrDefaultAsync(e => e.profileid == id);
             return View("StudentDetails",profile);
-
         }
         else
         {
             var profile = await _context.ProfileEmployees.FirstOrDefaultAsync(e => e.profileid == id);
             return View("EmployeeDetails",profile);
-
+        }
+    }
+    public async Task<IActionResult> Profile()
+    {
+        int? userId = HttpContext.Session.GetInt32("userid");
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Auth");
         }
 
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.id == userId);
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        if (user.role.Equals("Student", StringComparison.OrdinalIgnoreCase))
+        {
+            var profile = await _context.ProfileStudents.FirstOrDefaultAsync(p => p.profileid == userId);
+            if (profile == null) return NotFound("Student profile not found.");
+            return View("StudentProfile", profile);
+        }
+        else
+        {
+            var profile = await _context.ProfileEmployees.FirstOrDefaultAsync(p => p.profileid == userId);
+            if (profile == null) return NotFound("Employee profile not found.");
+            return View("EmployeeProfile", profile);
+        }
     }
+    public async Task<IActionResult> EditProfileStudent()
+    {
+        int? userId = HttpContext.Session.GetInt32("userid");
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Auth");  // If the user is not logged in, redirect to login page
+        }
+
+        var profile = await _context.ProfileStudents.FirstOrDefaultAsync(e => e.profileid == userId);
+        if (profile == null)
+        {
+            return NotFound();  // If the student profile is not found, show an error
+        }
+        return View(profile);  // Pass the student profile to the EditProfile view
+    }
+
+    public async Task<IActionResult> EditProfileEmployee()
+    {
+        int? userId = HttpContext.Session.GetInt32("userid");
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Auth");  // If the user is not logged in, redirect to login page
+        }
+
+        var profile = await _context.ProfileEmployees.FirstOrDefaultAsync(e => e.profileid == userId);
+        if (profile == null)
+        {
+            return NotFound();  // If the teacher profile is not found, show an error
+        }
+        return View(profile);  // Pass the teacher profile to the EditProfile view
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditProfile(profilestudent studentModel, profileemployee employeeModel, IFormFile? profilePicture)
+    {
+        int? userId = HttpContext.Session.GetInt32("userid");
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Auth");
+        }
+
+        var role = HttpContext.Session.GetString("UserRole");
+
+        if (role == "Student")
+        {
+            var profile = await _context.ProfileStudents.FirstOrDefaultAsync(e => e.profileid == userId);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            // Update profile properties
+            profile.name = studentModel?.name;
+
+            // Handle profile picture upload
+            if (profilePicture != null)
+            {
+                profile.ProfilePicture = await SaveProfilePicture(profilePicture);
+            }
+
+            _context.ProfileStudents.Update(profile);
+        }
+        else if (role == "Teacher" || role == "Employee") // Assuming employees include teachers
+        {
+            var profile = await _context.ProfileEmployees.FirstOrDefaultAsync(e => e.profileid == userId);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            // Update profile properties
+            profile.name = employeeModel?.name;
+            profile.age = employeeModel?.age;
+            profile.sex = employeeModel?.sex;
+            profile.bloodgroup = employeeModel?.bloodgroup;
+            profile.details = employeeModel?.details;
+
+            // Handle profile picture upload
+            if (profilePicture != null)
+            {
+                profile.ProfilePicture = await SaveProfilePicture(profilePicture);
+            }
+
+            _context.ProfileEmployees.Update(profile);
+        }
+        else
+        {
+            return NotFound("User role not found.");
+        }
+
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Profile");
+    }
+    // Helper function to save profile picture
+    private async Task<string> SaveProfilePicture(IFormFile profilePicture)
+    {
+        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+        string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(profilePicture.FileName);
+        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        {
+            await profilePicture.CopyToAsync(fileStream);
+        }
+
+        return "/images/" + uniqueFileName; // Save path in database
+    }
+
     public IActionResult nextPage(String UserListnow)
     {
         if (UserListnow.Equals( "Teacher"))
             return View("nextPageTeacher");
          return View("nextPageStudent");
     }
-
-   
-
-    }
+}

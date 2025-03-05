@@ -1,0 +1,36 @@
+﻿@model rajiunschool.Models.profileemployee
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center">Profile</h2>
+
+    <div class="card mx-auto shadow p-4 text-center" style="max-width: 500px;">
+        <div class="card-body">
+            <img src="@(!string.IsNullOrEmpty(Model.ProfilePicture) ? Model.ProfilePicture : Url.Content("~/images/default-avatar.png"))"
+                 class="img-fluid rounded-circle mb-3 profile-img"
+                 alt="Profile Picture">
+            <h4 class="mt-2">@Model.name</h4>
+
+            <p><strong>Name:</strong> @Model.name</p>
+            <p><strong>Join Date:</strong> @Model.joindate</p>
+            <p><strong>Age:</strong> @Model.age</p>
+            <p><strong>Gender:</strong> @Model.sex</p>
+            <p><strong>Blood Group:</strong> @Model.bloodgroup</p>
+            <p><strong>Department:</strong> @Model.dept</p>
+            <p><strong>Session:</strong> @Model.session</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #ddd;
+    }
+</style>

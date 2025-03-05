@@ -1,0 +1,68 @@
+﻿@model rajiunschool.Models.profileemployee
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center">Edit Profile</h2>
+
+    <div class="card mx-auto shadow p-4" style="max-width: 500px;">
+        <div class="card-body">
+            <form asp-action="EditProfile" asp-controller="User" method="post" enctype="multipart/form-data">
+                <div class="text-center">
+                    <img src="@(!string.IsNullOrEmpty(Model.ProfilePicture) ? Model.ProfilePicture : Url.Content("~/images/default-avatar.png"))"
+                         class="img-fluid rounded-circle mb-3 profile-img"
+                         alt="Profile Picture">
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="name" class="form-label">Full Name</label>
+                    <input asp-for="name" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="age" class="form-label">Age</label>
+                    <input asp-for="age" type="number" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="bloodgroup" class="form-label">Blood Group</label>
+                    <input asp-for="bloodgroup" type="text" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="sex" class="form-label">Gender</label>
+                    <select asp-for="sex" class="form-control">
+                        <option value="">Select Gender</option>
+                        <option value="Male" selected="@(Model.sex == "Male")">Male</option>
+                        <option value="Female" selected="@(Model.sex == "Female")">Female</option>
+                        <option value="Other" selected="@(Model.sex == "Other")">Other</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="dept" class="form-label">Department</label>
+                    <input asp-for="dept" type="text" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="profilePicture" class="form-label">Change Profile Picture</label>
+                    <input type="file" name="profilePicture" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #ddd;
+    }
+</style>
