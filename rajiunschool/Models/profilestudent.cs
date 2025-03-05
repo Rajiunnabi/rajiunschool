@@ -18,6 +18,7 @@ namespace rajiunschool.Models
         public string labclearancestatus { get; set; }
         public string? ProfilePicture { get; set; }
         public string session { get; set; }
+        public int running { get; set; }
 
     }
 }

@@ -1,4 +1,4 @@
-﻿@model currentcoursemark
+﻿@model failedcoursemark
 
 @{
     ViewData["Title"] = "Enter Student Marks";
@@ -6,7 +6,7 @@
 
 <h2>Enter Student Marks</h2>
 
-<form asp-action="StudentAddMarkAdd" asp-controller="Result" method="post">
+<form asp-action="FailedStudentAddMarkAdd" asp-controller="Result" method="post">
     <table class="table table-bordered text-center">
         <thead>
             <tr>
@@ -24,8 +24,6 @@
         <tbody>
             <tr>
                 <!-- Hidden field for teacherid -->
-               
-
                 <!-- Subject ID -->
                 <td><input type="number" class="form-control" asp-for="subjectid" required /></td>
 

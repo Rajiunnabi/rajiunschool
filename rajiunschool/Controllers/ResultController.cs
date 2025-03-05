@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Specialized;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Bcpg;
 using rajiunschool.data;
 using rajiunschool.Models;
 
@@ -29,12 +31,14 @@ namespace rajiunschool.Controllers
         //make a controller name StudentAddMark
         public IActionResult StudentAddMark(int profileid)
         {
+            int userid= HttpContext.Session.GetInt32("userid").Value;
             var subjectJson = HttpContext.Session.GetString("Subject");
             var subjectlist = JsonConvert.DeserializeObject<subjectlist>(subjectJson);
             var studentmark = new currentcoursemark();
             studentmark.studentid = profileid;
             studentmark.session = HttpContext.Session.GetString("currsession");
             studentmark.subjectid= subjectlist.id;
+            studentmark.teacherid = userid;
             Console.WriteLine(profileid);
             var coursemark = _context.CurrentCourseMarks.Where(x=> x.studentid==profileid && x.subjectid==subjectlist.id).FirstOrDefault();
             if (coursemark != null)
@@ -46,16 +50,16 @@ namespace rajiunschool.Controllers
                 studentmark.attendance = coursemark.attendance;
                 studentmark.final = coursemark.final;
                 studentmark.totalmarks = coursemark.totalmarks;
-                string concatenatedId = string.Concat(profileid, "-", subjectlist.id);
-                HttpContext.Session.SetInt32(concatenatedId, 1);
 
             }
             return View(studentmark);
         }
+        //make a controller name FailStudentAddMark
+       
         public IActionResult StudentAddMarkAdd(currentcoursemark currentcoursemark)
         {
             // Validate the model
-      
+               int userid = (int) HttpContext.Session.GetInt32("userid");
                 var subjectJson = HttpContext.Session.GetString("Subject");
                 var subjectlist = JsonConvert.DeserializeObject<subjectlist>(subjectJson);
                 // Step 1: Store quiz marks in an array and sort in descending order
@@ -64,14 +68,12 @@ namespace rajiunschool.Controllers
 
                 // Step 2: Sum the best 3 quizzes and compute average
                 int bestThreeQuizTotal = quizMarks[0] + quizMarks[1] + quizMarks[2];
-                int quizAverage = (int)Math.Ceiling((double)bestThreeQuizTotal / 3);
+                int quizAverage = bestThreeQuizTotal / 3;
 
                 // Step 3: Calculate total marks
                 currentcoursemark.totalmarks = quizAverage + currentcoursemark.attendance + currentcoursemark.final;
-                string concatenatedId = string.Concat(currentcoursemark.studentid, "-", subjectlist.id);
-            int flag = HttpContext.Session.GetInt32(concatenatedId) ?? 0;
-            Console.WriteLine("balkjsdf ");
-                Console.WriteLine(flag);
+                var flag = _context.CurrentCourseMarks.Where(c=> c.studentid==currentcoursemark.studentid && c.subjectid == currentcoursemark.subjectid).Count();
+           // Console.WriteLine(flag);
                 // Save the currentcoursemark to the database
                 if (flag==0)
                 {
@@ -89,6 +91,7 @@ namespace rajiunschool.Controllers
                     coursemark.attendance = currentcoursemark.attendance;
                     coursemark.final = currentcoursemark.final;
                     coursemark.totalmarks = currentcoursemark.totalmarks;
+                     Console.WriteLine(userid);
                     _context.SaveChanges();
                 }
                
@@ -111,6 +114,56 @@ namespace rajiunschool.Controllers
                 });
             
           
+        }
+
+        public IActionResult ViewFailedStudent()
+        {
+            int userid = (int)HttpContext.Session.GetInt32("userid");
+
+            // Get the list of failed students for the current teacher
+            var failedstudents = _context.FailedCourseMarks
+                .Where(x => x.teacherid == userid)
+                .ToList();
+
+            // Pass the list of profile students to the view
+            return View(failedstudents);
+        }
+        public IActionResult FailedStudentAddMark(failedcoursemark failcourse)
+        {
+
+            return View(failcourse);
+        }
+        //make a method name FailedStudentAddMark
+        public IActionResult FailedStudentAddMarkAdd(failedcoursemark failedcoursemark)
+        {
+            // Step 1: Store quiz marks in an array and sort in descending order
+            int[] quizMarks = { failedcoursemark.quiz1, failedcoursemark.quiz2, failedcoursemark.quiz3, failedcoursemark.quiz4 };
+            quizMarks = quizMarks.OrderByDescending(q => q).ToArray();
+            Console.WriteLine($"Final: {failedcoursemark.final}, Student ID: {failedcoursemark.studentid}, Teacher ID: {failedcoursemark.teacherid}, Subject ID: {failedcoursemark.subjectid}");
+            // Step 2: Sum the best 3 quizzes and compute average
+            int bestThreeQuizTotal = quizMarks[0] + quizMarks[1] + quizMarks[2];
+            int quizAverage = (int)Math.Ceiling((double)bestThreeQuizTotal / 3);
+
+            // Step 3: Calculate total marks
+            failedcoursemark.totalmarks = quizAverage + failedcoursemark.attendance + failedcoursemark.final;
+            // Generate a unique key for the session
+
+            // Check if the record already exists in the session
+
+            // Save or update the failedcoursemark in the database
+            if (failedcoursemark.totalmarks >= 40.0)
+            {
+                // Remove the failed course mark from the database
+                var failedCourse = _context.FailedCourseMarks.Where(s => s.studentid == failedcoursemark.studentid && s.subjectid == failedcoursemark.subjectid).FirstOrDefault();
+                var currentcoursemark = _context.CurrentCourseMarks.Where(x => x.studentid == failedcoursemark.studentid && x.subjectid == failedcoursemark.subjectid).FirstOrDefault();
+                currentcoursemark.totalmarks = failedcoursemark.totalmarks;
+                Console.WriteLine(currentcoursemark.totalmarks);
+                _context.FailedCourseMarks.Remove(failedCourse);
+                _context.SaveChanges();
+            }
+            
+
+            return RedirectToAction("ViewFailedStudent","Result"); // Redirect to a relevant action after saving
         }
 
     }
