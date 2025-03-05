@@ -1,0 +1,45 @@
+﻿@model List<failedcoursemark>
+
+<style>
+    /* Your existing CSS styles */
+</style>
+
+<div class="container">
+    <h2 class="text-center mb-4">Subject List</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Subject ID</th>
+                <th>Add Mark</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.studentid</td>
+                    <td>@student.subjectid</td>
+                    <td>
+                        <form asp-action="FailedStudentAddMark" asp-controller="Result" method="get">
+                            <input type="hidden" name="studentid" value="@student.studentid" />
+                            <input type="hidden" name="subjectid" value="@student.subjectid" />
+							<input type="hidden" name="teacherid" value="@student.teacherid" />
+							<input type="hidden" name="quiz1" value="@student.quiz1" />
+							<input type="hidden" name="quiz2" value="@student.quiz2" />
+							<input type="hidden" name="quiz3" value="@student.quiz3" />
+							<input type="hidden" name="quiz4" value="@student.quiz4" />
+							<input type="hidden" name="attendance" value="@student.attendance" />
+							<input type="hidden" name="final" value="@student.final" />
+							<input type="hidden" name="session" value="@student.session" />
+							<input type="hidden" name="totalmarks" value="@student.totalmarks" />
+
+                            <button type="submit" class="btn btn-primary">View</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

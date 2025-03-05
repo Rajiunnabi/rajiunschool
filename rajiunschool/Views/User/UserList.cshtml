@@ -6,6 +6,15 @@
 }
 
 <style>
+    .active {
+        color: green;
+        font-weight: bold;
+    }
+
+    .inactive {
+        color: red;
+        font-weight: bold;
+    }
     .container {
         margin-top: 50px;
         position: relative;
@@ -132,8 +141,7 @@
             <tr>
                 <th>ID</th>
                 <th>Username</th>
-                <th>Department</th>
-                <th>Action</th>
+                <th>Role</th>
                 <th>Profile</th>
             </tr>
         </thead>
@@ -146,9 +154,6 @@
                         <td>@user.id</td>
                         <td>@user.username</td>
                         <td>@user.role</td>
-                        <td>
-                            <a href="@Url.Action("DeleteUser", "CrudTable", new { id = user.id, UserListnow = UserListnow })" class="btn btn-danger">Delete</a>
-                        </td>
                         <td>
                             <a href="@Url.Action("Details", "User", new { id = user.id })" class="btn btn-primary">View Profile</a>
                         </td>

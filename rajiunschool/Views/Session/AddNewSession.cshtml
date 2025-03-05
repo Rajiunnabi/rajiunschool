@@ -1,0 +1,64 @@
+﻿
+
+<style>
+    body {
+        background: #f4f4f4;
+    }
+
+    .form-container {
+        max-width: 500px;
+        margin: 50px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control {
+        border-radius: 5px;
+    }
+
+    .btn-success {
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    .alert-success, .alert-danger {
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <div class="form-container">
+        <h3 class="text-center mb-4">"Session"</h3>
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">@ViewBag.Message</div>
+        }
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">@ViewBag.Message</div>
+        }
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <form asp-action="AddNewSessionOperation" asp-controller="Session" method="post" enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label class="form-label">Details</label>
+                <input type="text" name="newsession" class="form-control" placeholder="Enter New Semester Name" required>
+            </div>
+
+            <button type="submit" class="btn btn-success">Add</button>
+        </form>
+    </div>
+</div>
