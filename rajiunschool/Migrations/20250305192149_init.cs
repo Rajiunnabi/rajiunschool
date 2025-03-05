@@ -49,6 +49,7 @@ namespace rajiunschool.Migrations
                     hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     studentid = table.Column<int>(type: "int", nullable: false),
+                    teacherid = table.Column<int>(type: "int", nullable: false),
                     subjectid = table.Column<int>(type: "int", nullable: false),
                     quiz1 = table.Column<int>(type: "int", nullable: false),
                     quiz2 = table.Column<int>(type: "int", nullable: false),
@@ -65,15 +66,34 @@ namespace rajiunschool.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Department",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Department", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FailedCourseMarks",
                 columns: table => new
                 {
                     hudao = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     studentid = table.Column<int>(type: "int", nullable: false),
-                    ct = table.Column<int>(type: "int", nullable: false),
+                    subjectid = table.Column<int>(type: "int", nullable: false),
+                    teacherid = table.Column<int>(type: "int", nullable: false),
+                    quiz1 = table.Column<int>(type: "int", nullable: false),
+                    quiz2 = table.Column<int>(type: "int", nullable: false),
+                    quiz3 = table.Column<int>(type: "int", nullable: false),
+                    quiz4 = table.Column<int>(type: "int", nullable: false),
                     attendance = table.Column<int>(type: "int", nullable: false),
                     final = table.Column<int>(type: "int", nullable: false),
+                    totalmarks = table.Column<int>(type: "int", nullable: false),
                     session = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -167,7 +187,8 @@ namespace rajiunschool.Migrations
                     details = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     dept = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    session = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    session = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    running = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,7 +208,8 @@ namespace rajiunschool.Migrations
                     admittedsemester = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     labclearancestatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    session = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    session = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    running = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -344,6 +366,9 @@ namespace rajiunschool.Migrations
 
             migrationBuilder.DropTable(
                 name: "CurrentCourseMarks");
+
+            migrationBuilder.DropTable(
+                name: "Department");
 
             migrationBuilder.DropTable(
                 name: "FailedCourseMarks");

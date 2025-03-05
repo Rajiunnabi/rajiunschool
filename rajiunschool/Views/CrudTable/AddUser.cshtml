@@ -1,90 +1,75 @@
-﻿@model currentcoursemark
+﻿@model Dropdownmodel
 
 @{
-    ViewData["Title"] = "Enter Student Marks";
+    ViewData["Title"] = "Add User";
 }
 
-<h2>Enter Student Marks</h2>
+<style>
+    body {
+        background: #f4f4f4;
+    }
 
-<form asp-action="StudentAddMarkAdd" asp-controller="Result" method="post">
-    <!-- Hidden field for teacherid -->
-    <input type="hidden" asp-for="teacherid" />
+    .form-container {
+        max-width: 500px;
+        margin: 50px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-    <div class="mb-3">
-        <label class="form-label">Subject ID</label>
-        <input type="number" class="form-control" asp-for="subjectid" placeholder="Enter Subject ID" required />
+    .form-control {
+        border-radius: 5px;
+    }
+
+    .btn-success {
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    .alert-success, .alert-danger {
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <div class="form-container">
+        <h3 class="text-center mb-4">Add New User</h3>
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">@ViewBag.Message</div>
+        }
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <form asp-action="AddUser" asp-controller="CrudTable" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="Username" class="form-control" placeholder="Enter username" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Department</label>
+                <input type="text" name="Dept" class="form-control" placeholder="Enter department" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="Password" class="form-control" placeholder="Enter Password" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="SelectedOption">Choose an option:</label>
+                <select asp-for="SelectedOption" asp-items="Model.Options" class="form-control">
+                    <option value="">-- Select an option --</option>
+                </select>
+            </div>
+
+
+            <button type="submit" class="btn btn-success">Add User</button>
+        </form>
     </div>
-
-    <div class="mb-3">
-        <label class="form-label">Student ID</label>
-        <input type="number" class="form-control" asp-for="studentid" placeholder="Enter Student ID" required />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Quiz 1</label>
-        <input type="number" class="form-control" asp-for="quiz1" placeholder="Enter Quiz 1 Marks" required />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Quiz 2</label>
-        <input type="number" class="form-control" asp-for="quiz2" placeholder="Enter Quiz 2 Marks" required />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Quiz 3</label>
-        <input type="number" class="form-control" asp-for="quiz3" placeholder="Enter Quiz 3 Marks" required />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Quiz 4</label>
-        <input type="number" class="form-control" asp-for="quiz4" placeholder="Enter Quiz 4 Marks" required />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Attendance</label>
-        <input type="number" class="form-control" asp-for="attendance" placeholder="Enter Attendance Marks" required />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Final Exam</label>
-        <input type="number" class="form-control" asp-for="final" placeholder="Enter Final Exam Marks" required />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Session</label>
-        <input type="text" class="form-control" asp-for="session" placeholder="Enter Session" required />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Calculate & Save</button>
-</form>
-
-@if (Model != null)
-{
-    <h3 class="mt-4">All Student Marks</h3>
-    <table class="table table-bordered text-center">
-        <thead>
-            <tr>
-                <th>Student ID</th>
-                <th>Quiz 1</th>
-                <th>Quiz 2</th>
-                <th>Quiz 3</th>
-                <th>Quiz 4</th>
-                <th>Attendance</th>
-                <th>Final Exam</th>
-                <th>Total Marks</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>@Model.studentid</td>
-                <td>@Model.quiz1</td>
-                <td>@Model.quiz2</td>
-                <td>@Model.quiz3</td>
-                <td>@Model.quiz4</td>
-                <td>@Model.attendance</td>
-                <td>@Model.final</td>
-                <td class="fw-bold text-success">@Model.totalmarks</td>
-            </tr>
-        </tbody>
-    </table>
-}
+</div>

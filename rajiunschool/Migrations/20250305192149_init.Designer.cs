@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using rajiunschool.data;
 
@@ -10,9 +11,11 @@ using rajiunschool.data;
 namespace rajiunschool.Migrations
 {
     [DbContext(typeof(UmanagementContext))]
-    partial class UmanagementContextModelSnapshot : ModelSnapshot
+    [Migration("20250305192149_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

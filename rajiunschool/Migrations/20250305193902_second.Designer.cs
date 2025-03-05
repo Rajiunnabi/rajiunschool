@@ -11,8 +11,8 @@ using rajiunschool.data;
 namespace rajiunschool.Migrations
 {
     [DbContext(typeof(UmanagementContext))]
-    [Migration("20250304180203_init")]
-    partial class init
+    [Migration("20250305193902_second")]
+    partial class second
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -116,12 +116,32 @@ namespace rajiunschool.Migrations
                     b.Property<int>("subjectid")
                         .HasColumnType("int");
 
+                    b.Property<int>("teacherid")
+                        .HasColumnType("int");
+
                     b.Property<int>("totalmarks")
                         .HasColumnType("int");
 
                     b.HasKey("hudao");
 
                     b.ToTable("CurrentCourseMarks");
+                });
+
+            modelBuilder.Entity("rajiunschool.Models.department", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Department");
                 });
 
             modelBuilder.Entity("rajiunschool.Models.failedcoursemark", b =>
@@ -135,10 +155,19 @@ namespace rajiunschool.Migrations
                     b.Property<int>("attendance")
                         .HasColumnType("int");
 
-                    b.Property<int>("ct")
+                    b.Property<int>("final")
                         .HasColumnType("int");
 
-                    b.Property<int>("final")
+                    b.Property<int>("quiz1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quiz2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quiz3")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quiz4")
                         .HasColumnType("int");
 
                     b.Property<string>("session")
@@ -146,6 +175,15 @@ namespace rajiunschool.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("studentid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("subjectid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("teacherid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("totalmarks")
                         .HasColumnType("int");
 
                     b.HasKey("hudao");
@@ -314,6 +352,9 @@ namespace rajiunschool.Migrations
                     b.Property<int>("profileid")
                         .HasColumnType("int");
 
+                    b.Property<int>("running")
+                        .HasColumnType("int");
+
                     b.Property<string>("session")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -354,6 +395,9 @@ namespace rajiunschool.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("profileid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("running")
                         .HasColumnType("int");
 
                     b.Property<string>("semester")

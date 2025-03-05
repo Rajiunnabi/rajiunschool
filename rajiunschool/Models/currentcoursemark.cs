@@ -15,9 +15,7 @@ namespace rajiunschool.Models
         public int quiz2 { get; set; }
         public int quiz3 { get; set; }
         public int quiz4 { get; set; }
-
         public int attendance { get; set; }
-
         public int final { get; set; }
         public int totalmarks { get; set; }
         public string session {  get; set; }

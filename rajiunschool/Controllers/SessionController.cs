@@ -47,9 +47,6 @@ namespace rajiunschool.Controllers
 
                 }
                 if (ulflag==1) break;
-              
-               
-
             }
             Console.WriteLine(flag);
             if (flag==0)
