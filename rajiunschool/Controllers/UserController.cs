@@ -72,7 +72,6 @@ public class UserController : Controller
         return View("Userlist", librarians); // Pass filtered or full list to the view
     }
 
-
     public IActionResult Banker(string searchQuery)
     {
         ViewData["UserListnow"] = "Banker";
@@ -259,7 +258,6 @@ public class UserController : Controller
 
         return "/images/" + uniqueFileName; // Save path in database
     }
-
     public IActionResult nextPage(String UserListnow)
     {
         if (UserListnow.Equals( "Teacher"))

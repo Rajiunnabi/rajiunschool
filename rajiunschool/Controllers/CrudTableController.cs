@@ -115,13 +115,9 @@ namespace rajiunschool.Controllers
                         profileid = lastuser.id,
                         ProfilePicture = null,
                         session=session
-
-
                     };
                     _context.ProfileEmployees.Add(newProfile);
                     await _context.SaveChangesAsync();
-
-
                 }
 
                 ViewBag.Message = "User added successfully!";
@@ -154,8 +150,6 @@ namespace rajiunschool.Controllers
             return View(subjects.ToList()); // Pass filtered or full list to the view
         }
 
-
-
         public async Task<IActionResult> DeleteSubject(int id)
         {
             var subjectlist = await _context.SubjectLists.FindAsync(id);
@@ -170,7 +164,6 @@ namespace rajiunschool.Controllers
         }
         public IActionResult AddSubject()
         {
-
             return View();
         }
 
@@ -380,11 +373,9 @@ namespace rajiunschool.Controllers
         public async Task<IActionResult> PaymentStatusUpdate(string searchQuery)
         {
             
-                // Filter by transictionid
-                  var query = _context.PaymentViewForStudents
-                .Where(s => s.transictionid == searchQuery);
-
-
+            // Filter by transictionid
+                var query = _context.PaymentViewForStudents
+            .Where(s => s.transictionid == searchQuery);
 
             // Get the first matching record
             var paymentRecord = query.FirstOrDefault();
@@ -401,7 +392,6 @@ namespace rajiunschool.Controllers
             // Fetch the updated list of records (after saving changes)
 
             // Pass the updated list to the view
-
         }
 
         public IActionResult AddPaymentforStudent()
@@ -414,24 +404,22 @@ namespace rajiunschool.Controllers
         {
             try
             {
-                var users= _context.ProfileStudents
-            .Where(u => u.dept == department)
-            .ToList();
-             foreach(var user in users)
+                 var users= _context.ProfileStudents
+                .Where(u => u.dept == department)
+                .ToList();
+                foreach(var user in users)
                 {
-                    var payment = new paymentviewforstudent();
-                    payment.session= HttpContext.Session.GetString("currsession");
-                    payment.studentid = user.profileid;
-                    payment.addmissionfee = admissionfee;
-                    payment.tutionfee = tutionfee;
-                    payment.transportationfee = transportationfee;
-                    string randomstring = RandomStringGenerator.GenerateRandomString(12);
-                    payment.transictionid = randomstring;
-                    payment.status = "Due";
-                    _context.PaymentViewForStudents.Add(payment);
-                    _context.SaveChanges();
-
-
+                        var payment = new paymentviewforstudent();
+                        payment.session= HttpContext.Session.GetString("currsession");
+                        payment.studentid = user.profileid;
+                        payment.addmissionfee = admissionfee;
+                        payment.tutionfee = tutionfee;
+                        payment.transportationfee = transportationfee;
+                        string randomstring = RandomStringGenerator.GenerateRandomString(12);
+                        payment.transictionid = randomstring;
+                        payment.status = "Due";
+                        _context.PaymentViewForStudents.Add(payment);
+                        _context.SaveChanges();
                 }
                 TempData["SuccessMessage"] = "Subject added successfully!";
                 return RedirectToAction("Dashboard", "Dashboard");
@@ -440,13 +428,11 @@ namespace rajiunschool.Controllers
             {
                 ViewBag.Error = "An error occurred while adding the subject.";
                 return View();
-                
             }
         }
 
         public async Task<IActionResult> AddSubjecttoTeacher(int subjectid,int teacherid)
         {
-
             // Filter by transictionid
            string cursession = HttpContext.Session.GetString("currsession");
           var teachersubjectadd = new teachercourseview();
@@ -623,12 +609,5 @@ namespace rajiunschool.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("SeeSubjectListForTeacher", "CrudTable");
         }
-
-        
-      
-
-
-
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Bcpg;
 using rajiunschool.data;
@@ -112,8 +113,6 @@ namespace rajiunschool.Controllers
                     instructor = subjectlist.instructor,
                     takaperclass = subjectlist.takaperclass
                 });
-            
-          
         }
 
         public IActionResult ViewFailedStudent()
@@ -161,10 +160,34 @@ namespace rajiunschool.Controllers
                 _context.FailedCourseMarks.Remove(failedCourse);
                 _context.SaveChanges();
             }
-            
-
             return RedirectToAction("ViewFailedStudent","Result"); // Redirect to a relevant action after saving
         }
+        // Show available sessions and results dynamically
+        public IActionResult StudentResult(string sessionName = null)
+        {
+            int? studentId = HttpContext.Session.GetInt32("userid");
+            if (studentId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
 
+            // Get available sessions
+            var sessions = _context.CurrentCourseMarks
+                .Where(m => m.studentid == studentId)
+                .Select(m => m.session)
+                .Distinct()
+                .ToList();
+
+            // Get results only if a session is selected
+            var results = !string.IsNullOrEmpty(sessionName)
+                ? _context.CurrentCourseMarks
+                    .Where(m => m.studentid == studentId && m.session == sessionName)
+                    .ToList()
+                : new List<currentcoursemark>();
+
+            ViewBag.Sessions = sessions;
+            ViewBag.SelectedSession = sessionName;
+            return View(results);
+        }
     }
 }

@@ -19,7 +19,6 @@ namespace rajiunschool.Controllers
         //Make a Controller name AddNewSemester
         public IActionResult AddNewSession()
         {
-            Console.WriteLine("Kire vai ki choltase");
             return View();
         }
         //Make a controller name AddNewSemester which will store value in daatabase session
@@ -30,12 +29,12 @@ namespace rajiunschool.Controllers
             var department = _context.Department.ToList();
             foreach(var dept in department)
             {
-                int subjectcount = _context.SubjectLists.Count(s=>s.dept==dept.name);
                 var studentcount = _context.ProfileStudents.Where(s => s.dept == dept.name && s.running == 0).ToList();
 
                 int ulflag = 0;
                 foreach(var student in studentcount)
                 {
+                    int subjectcount = _context.SubjectLists.Count(s => s.dept == dept.name && s.semester == student.semester);
                     int subject = _context.CurrentCourseMarks.Count(s=>s.studentid == student.profileid && s.session == cursession);
                     Console.WriteLine($"Student Result Count:  Student Count:{student.profileid}, {subject}, Subject Count: {subjectcount}");
                     if (subject != subjectcount)
@@ -51,7 +50,6 @@ namespace rajiunschool.Controllers
             Console.WriteLine(flag);
             if (flag==0)
             {
-                Console.WriteLine("VAi ami ki asholei vitore");
                 var currentstudent = _context.ProfileStudents.Where(s => s.running == 0).ToList();
 
                 foreach (var student in currentstudent)
@@ -76,7 +74,6 @@ namespace rajiunschool.Controllers
                             failedCourse.attendance = mark.attendance;
                             failedCourse.totalmarks = mark.totalmarks;
                             _context.FailedCourseMarks.Add(failedCourse);
-
                         }
                     }
 
@@ -126,6 +123,5 @@ namespace rajiunschool.Controllers
                 return View("AddNewSession"); // Ensure this view exists
             }
         }
-
     }
 }

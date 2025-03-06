@@ -1,0 +1,61 @@
+﻿@model List<rajiunschool.Models.currentcoursemark>
+
+@{
+    ViewData["Title"] = "Student Result";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center">Student Result</h2>
+
+    <!-- Session Selection Form -->
+    <form method="get" class="text-center mb-4">
+        <label for="session" class="form-label">Select Session:</label>
+        <select name="sessionName" id="session" class="form-select w-50 mx-auto" onchange="this.form.submit()">
+            <option value="">-- Select Session --</option>
+            @foreach (var session in ViewBag.Sessions as List<string>)
+            {
+                <option value="@session" selected="@(session == ViewBag.SelectedSession ? "selected" : null)">
+                    @session
+                </option>
+            }
+        </select>
+    </form>
+
+    <!-- Display Results -->
+    @if (Model.Count > 0)
+    {
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Subject ID</th>
+                    <th>Quiz 1</th>
+                    <th>Quiz 2</th>
+                    <th>Quiz 3</th>
+                    <th>Quiz 4</th>
+                    <th>Attendance</th>
+                    <th>Final</th>
+                    <th>Total Marks</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var result in Model)
+                {
+                    <tr>
+                        <td>@result.subjectid</td>
+                        <td>@result.quiz1</td>
+                        <td>@result.quiz2</td>
+                        <td>@result.quiz3</td>
+                        <td>@result.quiz4</td>
+                        <td>@result.attendance</td>
+                        <td>@result.final</td>
+                        <td><strong>@result.totalmarks</strong></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else if (!string.IsNullOrEmpty(ViewBag.SelectedSession))
+    {
+        <p class="text-center text-danger">No results found for the selected session.</p>
+    }
+</div>
