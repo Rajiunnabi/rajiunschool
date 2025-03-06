@@ -1,21 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using rajiunschool.data;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace rajiunschool.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Http;
-    using System.Linq;
-    using rajiunschool.data;
-    using static System.Runtime.InteropServices.JavaScript.JSType;
-    using Microsoft.EntityFrameworkCore;
-
     public class AuthController : Controller
     {
         private readonly UmanagementContext _context;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(UmanagementContext context)
+        public AuthController(UmanagementContext context, ILogger<AuthController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Show Login Page
@@ -28,50 +29,90 @@ namespace rajiunschool.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-            var user = _context.Users.FirstOrDefault(u => u.username == username && u.password == password);
-            var session = await _context.Session
+            try
+            {
+                // Validate inputs
+                if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                {
+                    ViewBag.Error = "Username and password are required.";
+                    return View();
+                }
+
+                // Fetch the latest session
+                var session = await _context.Session
                     .OrderByDescending(s => s.id)
                     .FirstOrDefaultAsync();
-            HttpContext.Session.SetString("currsession", session.name);
 
-            if (user != null)
-            {
-                // Store session variables
-                HttpContext.Session.SetString("UserRole", user.role);
-                HttpContext.Session.SetInt32("userid", user.id);
-
-                // Role-based redirection
-                return RedirectToAction("Dashboard", "Dashboard");
-            }
-            else
-            {
-                int id;
-                if (int.TryParse(username, out id))
+                if (session == null)
                 {
-                    var user1 = _context.Users.FirstOrDefault(u => u.id == id && u.password == password);
-                    if (user1 != null)
+                    _logger.LogWarning("No active session found.");
+                    ViewBag.Error = "No active session found. Please contact the administrator.";
+                    return View();
+                }
+
+                // Store the current session in the HTTP context
+                HttpContext.Session.SetString("currsession", session.name);
+
+                // Check if the user exists with the provided username and password
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.username == username && u.password == password);
+
+                if (user != null)
+                {
+                    // Store session variables
+                    HttpContext.Session.SetString("UserRole", user.role);
+                    HttpContext.Session.SetInt32("userid", user.id);
+
+                    _logger.LogInformation($"User {username} logged in successfully.");
+                    return RedirectToAction("Dashboard", "Dashboard");
+                }
+
+                // If username is a number, check if it's a valid user ID
+                if (int.TryParse(username, out int userId))
+                {
+                    var userById = await _context.Users
+                        .FirstOrDefaultAsync(u => u.id == userId && u.password == password);
+
+                    if (userById != null)
                     {
                         // Store session variables
-                        HttpContext.Session.SetString("UserRole", user1.role);
-                        HttpContext.Session.SetInt32("userid", user1.id);
+                        HttpContext.Session.SetString("UserRole", userById.role);
+                        HttpContext.Session.SetInt32("userid", userById.id);
 
-                        // Role-based redirection
+                        _logger.LogInformation($"User with ID {userId} logged in successfully.");
                         return RedirectToAction("Dashboard", "Dashboard");
                     }
                 }
 
+                // If no user is found, show an error message
+                ViewBag.Error = "Invalid Username or Password";
+                _logger.LogWarning($"Failed login attempt for username: {username}.");
+                return View();
             }
-
-            ViewBag.Error = "Invalid Username or Password";
-            return View();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during login.");
+                ViewBag.Error = "An error occurred while processing your request. Please try again.";
+                return View();
+            }
         }
 
         // Logout
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Login");
+            try
+            {
+                // Clear all session data
+                HttpContext.Session.Clear();
+                _logger.LogInformation("User logged out successfully.");
+                return RedirectToAction("Login");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during logout.");
+                TempData["ErrorMessage"] = "An error occurred while logging out. Please try again.";
+                return RedirectToAction("Login");
+            }
         }
     }
-
 }

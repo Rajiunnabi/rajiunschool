@@ -1,11 +1,17 @@
-using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using rajiunschool.data;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Configure Data Protection to use a persistent key storage location
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(@"E:\.netfolders\rajiunschool\DataProtection-Keys")) // Replace with your desired path
+    .SetApplicationName("rajiunschool"); // Ensure consistent application name
 
 // Configure session
 builder.Services.AddDistributedMemoryCache(); // Session storage
