@@ -377,4 +377,43 @@ public class UserController : Controller
             return RedirectToAction("Error", "Home");
         }
     }
+    //Create a method name ChangeStatus which will change the value to 0 if the profileStudents.running = 1 and vice versa and also if the User.role in not student it will do the same in ProfileEmployee
+    public async Task<IActionResult> ChangeStatus(int id,string role)
+    {
+        try
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            if (role.Equals("Student"))
+            {
+                var profile = await _context.ProfileStudents.FirstOrDefaultAsync(e => e.profileid == id);
+                if (profile == null) return NotFound("Student profile not found.");
+                profile.running = profile.running == 1 ? 0 : 1;
+                _context.ProfileStudents.Update(profile);
+            }
+            else
+            {
+                var profile = await _context.ProfileEmployees.FirstOrDefaultAsync(e => e.profileid == id);
+                if (profile == null) return NotFound("Employee profile not found.");
+                profile.running = profile.running == 1 ? 0 : 1;
+                _context.ProfileEmployees.Update(profile);
+            }
+            //now it will search User.running and convert it to 0 if it is 1 and vice versa
+            user.running = user.running == 1 ? 0 : 1;
+            await _context.SaveChangesAsync();
+            var userlist = _context.Users.Where(u => u.id == id).ToList();
+            ViewData["UserListnow"] = role;
+            return View("UserList",userlist);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in ChangeStatus action");
+            return RedirectToAction("Error", "Home");
+        }
+    }
+
+
 }

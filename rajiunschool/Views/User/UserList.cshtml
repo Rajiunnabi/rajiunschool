@@ -142,7 +142,9 @@
                 <th>ID</th>
                 <th>Username</th>
                 <th>Role</th>
+                <th>Current Status</th>
                 <th>Profile</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -156,6 +158,19 @@
                         <td>@user.role</td>
                         <td>
                             <a href="@Url.Action("Details", "User", new { id = user.id })" class="btn btn-primary">View Profile</a>
+                        </td>
+						<td>
+							@if (user.running == 0)
+							{
+								<span class="active">Active</span>
+							}
+							else
+							{
+								<span class="inactive">Inactive</span>
+							}
+						</td>
+                        <td>
+                            <a href="@Url.Action("ChangeStatus", "User", new { id = user.id , role = UserListnow })" class="btn btn-primary">Change</a>
                         </td>
                     </tr>
                 }

@@ -15,6 +15,9 @@ using iText.Layout.Properties;
 using Microsoft.Extensions.Logging;
 using System.Collections.Immutable;
 using iText.Svg.Renderers.Impl;
+using iText.Commons.Actions.Contexts;
+using Org.BouncyCastle.Crypto.Generators;
+using BCrypt.Net;
 
 namespace rajiunschool.Controllers
 {
@@ -75,33 +78,37 @@ namespace rajiunschool.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUser(string Username, string Dept, string Password, Dropdownmodel model)
+     public async Task<IActionResult> AddUser(string Username, string Dept, string Password, Dropdownmodel model)
+    {
+        try
         {
-            try
+            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Dept) || string.IsNullOrWhiteSpace(Password))
             {
-                if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Dept) || string.IsNullOrWhiteSpace(Password))
-                {
-                    ViewBag.Error = "All fields are required.";
-                    return View(model);
-                }
+                ViewBag.Error = "All fields are required.";
+                return View(model);
+            }
 
-                var newUser = new users
-                {
-                    username = Username,
-                    role = model.SelectedOption,
-                    password = Password
-                };
+            // Hash the password using bcrypt
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(Password);
 
-                var session = HttpContext.Session.GetString("currsession");
-                _context.Users.Add(newUser);
-                await _context.SaveChangesAsync();
+            var newUser = new users
+            {
+                username = Username,
+                role = model.SelectedOption,
+                password = hashedPassword,
+                running = 0// Store the hashed password
+            };
 
-                var lastuser = await _context.Users
-                    .OrderByDescending(s => s.id)
-                    .FirstOrDefaultAsync();
+            var session = HttpContext.Session.GetString("currsession");
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
 
-                if (model.SelectedOption.Equals("Student"))
-                {
+            var lastuser = await _context.Users
+                .OrderByDescending(s => s.id)
+                .FirstOrDefaultAsync();
+
+            if (model.SelectedOption.Equals("Student"))
+            {
                     var newProfile = new profilestudent
                     {
                         profileid = lastuser.id,
@@ -110,38 +117,40 @@ namespace rajiunschool.Controllers
                         semester = "1.1",
                         admittedsemester = session,
                         labclearancestatus = "NO DUE",
-                        ProfilePicture = "~/images/default-avatar.png",// Default image path
-                        session = session
+                        ProfilePicture = "~/images/default-avatar.png", // Default image path
+                        session = session,
+                        running = 0
                     };
-                    _context.ProfileStudents.Add(newProfile);
-                }
-                else
-                {
-                    var newProfile = new profileemployee
-                    {
-                        name = Username,
-                        dept = Dept,
-                        joindate = DateTime.Now.ToString("MMMM yyyy"),
-                        profileid = lastuser.id,
-                        ProfilePicture = "~/images/default-avatar.png",
-                        session = session
-                    };
-                    _context.ProfileEmployees.Add(newProfile);
-                }
-
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "User added successfully!";
-                return RedirectToAction(newUser.role, "User");
+                _context.ProfileStudents.Add(newProfile);
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex, "Error adding user.");
-                ViewBag.Error = "An error occurred while adding the user.";
-                return View(model);
+                var newProfile = new profileemployee
+                {
+                    name = Username,
+                    dept = Dept,
+                    joindate = DateTime.Now.ToString("MMMM yyyy"),
+                    profileid = lastuser.id,
+                    ProfilePicture = "~/images/default-avatar.png",
+                    session = session,
+                    running = 0
+                };
+                _context.ProfileEmployees.Add(newProfile);
             }
-        }
 
-        public IActionResult SubjectList(string searchQuery)
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "User added successfully!";
+            return RedirectToAction(newUser.role, "User");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error adding user.");
+            ViewBag.Error = "An error occurred while adding the user.";
+            return View(model);
+        }
+    }
+
+    public IActionResult SubjectList(string searchQuery)
         {
             try
             {
@@ -174,6 +183,8 @@ namespace rajiunschool.Controllers
             try
             {
                 var subjectlist = await _context.SubjectLists.FindAsync(id);
+                var teachrCourseView = _context.TeacherCourseViews
+                    .FirstOrDefault(s => s.subjectid == id);
                 if (subjectlist == null)
                 {
                     _logger.LogWarning($"Subject with ID {id} not found.");
@@ -181,6 +192,7 @@ namespace rajiunschool.Controllers
                 }
 
                 _context.SubjectLists.Remove(subjectlist);
+                _context.TeacherCourseViews.Remove(teachrCourseView);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("SubjectList", "CrudTable");
             }
@@ -780,5 +792,86 @@ namespace rajiunschool.Controllers
                 return RedirectToAction("SeeSubjectListForTeacher", "CrudTable");
             }
         }
+        //Create a method named AddDept
+        public IActionResult AddDept()
+        {
+            Console.WriteLine("Hurray I am here");
+            return View();
+        }
+        //Crate a method name AddDeptAdd and add value to the Department table in the database
+        [HttpPost]
+        public async Task<IActionResult> AddDeptAdd(string deptname)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(deptname))
+                {
+                    ViewBag.Error = "All fields are required.";
+                    return View();
+                }
+                var newDept = new department
+                {
+                   name = deptname
+                };
+                _context.Department.Add(newDept);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Department added successfully!";
+                return RedirectToAction("DepartmentList", "CrudTable");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding department.");
+                ViewBag.Error = "An error occurred while adding the department.";
+                return View("AddDept");
+            }
+        }
+
+        //make a method which will show the list of department and the method name Will be DeptList
+        public IActionResult DepartmentList()
+        {
+            try
+            {
+                var departments = _context.Department.ToList();
+                return View(departments);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving department list.");
+                TempData["ErrorMessage"] = "An error occurred while retrieving the department list.";
+                return RedirectToAction("Index");
+            }
+        }
+        //Add a method name DeleteDept which will delete the department from the database and if there any dept in ProfileStudent or ProfileEmployee with the same name as that Department then it ill not delete tha department and will show a error message there exist user in that department
+        public async Task<IActionResult> DeleteDept(int id)
+        {
+            try
+            {
+                var dept = await _context.Department.FindAsync(id);
+                if (dept == null)
+                {
+                    _logger.LogWarning($"Department with ID {id} not found.");
+                    return NotFound();
+                }
+                var profilestudent = _context.ProfileStudents
+                    .FirstOrDefault(s => s.dept == dept.name);
+                var profileemployee = _context.ProfileEmployees
+                    .FirstOrDefault(s => s.dept == dept.name);
+                if (profilestudent != null || profileemployee != null)
+                {
+                    TempData["ErrorMessage"] = "There are users in this department. Please delete the users first.";
+                    return RedirectToAction("DepartmentList", "CrudTable");
+                }
+                _context.Department.Remove(dept);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("DepartmentList", "CrudTable");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting department.");
+                TempData["ErrorMessage"] = "An error occurred while deleting the department.";
+                return RedirectToAction("DepartmentList", "CrudTable");
+            }
+        }
     }
+
 }

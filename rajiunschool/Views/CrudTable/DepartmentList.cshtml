@@ -1,0 +1,113 @@
+﻿@model List<department>
+
+<style>
+    .container {
+        margin-top: 50px;
+        position: relative;
+    }
+
+    .top-right-btn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-danger, .btn-primary {
+        padding: 5px 10px;
+        text-decoration: none;
+        color: white;
+        border-radius: 5px;
+    }
+
+    .btn-danger {
+        background-color: red;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+    }
+
+    .search-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 300px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .search-button {
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+
+    .reset-button {
+        padding: 8px 15px;
+        background-color: gray;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-left: 10px;
+    }
+
+        .reset-button:hover {
+            background-color: darkgray;
+        }
+</style>
+
+<div class="container">
+    <h2 class="text-center mb-4">Subject List</h2>
+
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Subject ID</th>
+                <th>Subject Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dept in Model)
+            {
+                <tr>
+                    <td>@dept.id</td>
+                    <td>@dept.name</td>
+                    <td>
+                        <a href="@Url.Action("DeleteDept", "CrudTable", new { id = dept.id})" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

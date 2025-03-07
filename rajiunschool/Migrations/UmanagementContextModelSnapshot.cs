@@ -645,6 +645,9 @@ namespace rajiunschool.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("running")
+                        .HasColumnType("int");
+
                     b.Property<string>("username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

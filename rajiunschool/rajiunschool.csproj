@@ -24,6 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 		<PackageReference Include="itext7" Version="9.1.0" />
 		<PackageReference Include="itext7.bouncy-castle-adapter" Version="9.1.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
@@ -40,6 +41,7 @@
 	<ItemGroup>
 	  <Folder Include="Migrations\" />
 	  <Folder Include="DataProtection-Keys\" />
+	  <Folder Include="wwwroot\images\" />
 	  <Folder Include="wwwroot\routines\" />
 	</ItemGroup>
 

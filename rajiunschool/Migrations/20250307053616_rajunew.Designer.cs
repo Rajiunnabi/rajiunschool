@@ -11,8 +11,8 @@ using rajiunschool.data;
 namespace rajiunschool.Migrations
 {
     [DbContext(typeof(UmanagementContext))]
-    [Migration("20250305193902_second")]
-    partial class second
+    [Migration("20250307053616_rajunew")]
+    partial class rajunew
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -647,6 +647,9 @@ namespace rajiunschool.Migrations
                     b.Property<string>("role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("running")
+                        .HasColumnType("int");
 
                     b.Property<string>("username")
                         .IsRequired()
