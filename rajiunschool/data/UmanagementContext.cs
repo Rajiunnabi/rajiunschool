@@ -26,6 +26,7 @@ namespace rajiunschool.data
         public DbSet<session> Session { get; set; }
         public DbSet<routine>Routine { get; set; }
         public DbSet<department> Department { get; set; }
-       
+        public DbSet<TeacherRoutine> TeacherRoutine { get; set; }
+
     }
 }

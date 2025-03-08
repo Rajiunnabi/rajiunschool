@@ -21,6 +21,137 @@ namespace YourNamespace.Controllers
             _hostingEnvironment = hostingEnvironment;
             _logger = logger;
         }
+        // GET: Routine/ManageTeacherRoutine
+        public IActionResult ManageTeacherRoutine()
+        {
+            try
+            {
+                var routines = _context.TeacherRoutine.ToList();
+                return View(routines);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in ManageTeacherRoutine action.");
+                TempData["ErrorMessage"] = "An error occurred while retrieving teacher routines.";
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        // GET: Routine/UploadTeacherRoutine
+        public IActionResult UploadTeacherRoutine()
+        {
+            return View();
+        }
+
+        // POST: Routine/UploadTeacherRoutine
+        [HttpPost]
+        public async Task<IActionResult> UploadTeacherRoutineAdd(int teacherid, string teacherUsername, string department, IFormFile file)
+        {
+            try
+            {
+                if (file == null || file.Length == 0)
+                {
+                    ViewBag.Error = "Please select a file to upload.";
+                    return View("UploadTeacherRoutine");
+                }
+
+                if (string.IsNullOrWhiteSpace(teacherUsername) || string.IsNullOrWhiteSpace(department))
+                {
+                    ViewBag.Error = "Teacher username and department are required.";
+                    return View("UploadTeacherRoutine");
+                }
+
+                var uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "teacher_routines");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var routine = new TeacherRoutine
+                {
+                    teacherprofileid = teacherid,
+                    TeacherUsername = teacherUsername,
+                    Department = department,
+                    FileName = file.FileName,
+                    FilePath = Path.Combine("teacher_routines", fileName)
+                };
+
+                _context.TeacherRoutine.Add(routine);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Teacher routine uploaded successfully.";
+                return RedirectToAction(nameof(ManageTeacherRoutine));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in UploadTeacherRoutineAdd action.");
+                TempData["ErrorMessage"] = "An error occurred while uploading the teacher routine.";
+                return View("UploadTeacherRoutine");
+            }
+        }
+        // GET: Routine/ViewTeacherRoutine
+        public IActionResult ViewTeacherRoutine()
+        {
+            try
+            {
+                var userid = HttpContext.Session.GetInt32("userid") ?? throw new Exception("User ID not found in session.");
+                
+                var routine = _context.TeacherRoutine.FirstOrDefault(r => r.teacherprofileid == userid);
+
+                if (routine == null)
+                {
+                    ViewBag.Message = "No routine available for your department.";
+                    return View();
+                }
+
+                return View(routine);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in ViewTeacherRoutine action.");
+                TempData["ErrorMessage"] = "An error occurred while retrieving the routine.";
+                return RedirectToAction("Index", "Home");
+            }
+        }
+        // GET: Routine/DeleteTeacherRoutine/5
+        public async Task<IActionResult> DeleteTeacherRoutine(int id)
+        {
+            try
+            {
+                var routine = await _context.TeacherRoutine.FindAsync(id);
+                if (routine == null)
+                {
+                    TempData["ErrorMessage"] = "Teacher routine not found.";
+                    return RedirectToAction(nameof(ManageTeacherRoutine));
+                }
+
+                var filePath = Path.Combine(_hostingEnvironment.WebRootPath, routine.FilePath);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                _context.TeacherRoutine.Remove(routine);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Teacher routine deleted successfully.";
+                return RedirectToAction(nameof(ManageTeacherRoutine));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in DeleteTeacherRoutine action.");
+                TempData["ErrorMessage"] = "An error occurred while deleting the teacher routine.";
+                return RedirectToAction(nameof(ManageTeacherRoutine));
+            }
+        }
 
         // GET: Routine/ManageRoutine
         public IActionResult ManageRoutine()

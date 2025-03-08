@@ -10,7 +10,7 @@ builder.Services.AddControllersWithViews();
 
 // Configure Data Protection to use a persistent key storage location
 builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo(@"E:\.netfolders\rajiunschool\DataProtection-Keys")) // Replace with your desired path
+    .PersistKeysToFileSystem(new DirectoryInfo(@"C:\Users\User\Desktop\rajiunschool\rajiunschool\DataProtection-Keys")) // Replace with your desired path
     .SetApplicationName("rajiunschool"); // Ensure consistent application name
 
 // Configure session

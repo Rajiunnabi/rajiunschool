@@ -66,49 +66,56 @@ namespace rajiunschool.Controllers
             var model = new Dropdownmodel
             {
                 Options = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "Teacher", Text = "Teacher" },
-                    new SelectListItem { Value = "Student", Text = "Student" },
-                    new SelectListItem { Value = "Banker", Text = "Banker" },
-                    new SelectListItem { Value = "Libarian", Text = "Libarian" },
-                    new SelectListItem { Value = "Others", Text = "Others" }
-                }
+        {
+            new SelectListItem { Value = "Teacher", Text = "Teacher" },
+            new SelectListItem { Value = "Student", Text = "Student" },
+            new SelectListItem { Value = "Banker", Text = "Banker" },
+            new SelectListItem { Value = "Libarian", Text = "Libarian" },
+            new SelectListItem { Value = "Others", Text = "Others" }
+        }
             };
             return View(model);
         }
 
         [HttpPost]
-     public async Task<IActionResult> AddUser(string Username, string Dept, string Password, Dropdownmodel model)
-    {
-        try
+        public async Task<IActionResult> AddUser(string Username, string Dept, string Password, Dropdownmodel model)
         {
-            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Dept) || string.IsNullOrWhiteSpace(Password))
+            try
             {
-                ViewBag.Error = "All fields are required.";
-                return View(model);
-            }
+                if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
+                {
+                    ViewBag.Error = "Username and Password are required.";
+                    return View(model);
+                }
 
-            // Hash the password using bcrypt
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(Password);
+                // If the role is not "Banker", ensure the department is provided
+                if (model.SelectedOption != "Banker" && string.IsNullOrWhiteSpace(Dept))
+                {
+                    ViewBag.Error = "Department is required.";
+                    return View(model);
+                }
 
-            var newUser = new users
-            {
-                username = Username,
-                role = model.SelectedOption,
-                password = hashedPassword,
-                running = 0// Store the hashed password
-            };
+                // Hash the password using bcrypt
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(Password);
 
-            var session = HttpContext.Session.GetString("currsession");
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
+                var newUser = new users
+                {
+                    username = Username,
+                    role = model.SelectedOption,
+                    password = hashedPassword,
+                    running = 0
+                };
 
-            var lastuser = await _context.Users
-                .OrderByDescending(s => s.id)
-                .FirstOrDefaultAsync();
+                var session = HttpContext.Session.GetString("currsession");
+                _context.Users.Add(newUser);
+                await _context.SaveChangesAsync();
 
-            if (model.SelectedOption.Equals("Student"))
-            {
+                var lastuser = await _context.Users
+                    .OrderByDescending(s => s.id)
+                    .FirstOrDefaultAsync();
+
+                if (model.SelectedOption.Equals("Student"))
+                {
                     var newProfile = new profilestudent
                     {
                         profileid = lastuser.id,
@@ -117,40 +124,40 @@ namespace rajiunschool.Controllers
                         semester = "1.1",
                         admittedsemester = session,
                         labclearancestatus = "NO DUE",
-                        ProfilePicture = "~/images/default-avatar.png", // Default image path
+                        ProfilePicture = null, // Default image path
                         session = session,
                         running = 0
                     };
-                _context.ProfileStudents.Add(newProfile);
-            }
-            else
-            {
-                var newProfile = new profileemployee
+                    _context.ProfileStudents.Add(newProfile);
+                }
+                else
                 {
-                    name = Username,
-                    dept = Dept,
-                    joindate = DateTime.Now.ToString("MMMM yyyy"),
-                    profileid = lastuser.id,
-                    ProfilePicture = "~/images/default-avatar.png",
-                    session = session,
-                    running = 0
-                };
-                _context.ProfileEmployees.Add(newProfile);
+                    var newProfile = new profileemployee
+                    {
+                        name = Username,
+                        dept = model.SelectedOption == "Banker" ? "N/A" : Dept, // Set department to "N/A" for Banker
+                        joindate = DateTime.Now.ToString("MMMM yyyy"),
+                        profileid = lastuser.id,
+                        ProfilePicture = null,
+                        session = session,
+                        running = 0
+                    };
+                    _context.ProfileEmployees.Add(newProfile);
+                }
+
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "User added successfully!";
+                return RedirectToAction(newUser.role, "User");
             }
-
-            await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "User added successfully!";
-            return RedirectToAction(newUser.role, "User");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding user.");
+                ViewBag.Error = "An error occurred while adding the user.";
+                return View(model);
+            }
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error adding user.");
-            ViewBag.Error = "An error occurred while adding the user.";
-            return View(model);
-        }
-    }
 
-    public IActionResult SubjectList(string searchQuery)
+        public IActionResult SubjectList(string searchQuery)
         {
             try
             {
@@ -328,7 +335,7 @@ namespace rajiunschool.Controllers
                 }
 
                 var studentinfo = await _context.PaymentViewForStudents
-                    .FirstOrDefaultAsync(s => s.transictionid==transictionid);
+                    .FirstOrDefaultAsync(s => s.transictionid == transictionid);
 
                 if (studentinfo == null)
                 {
@@ -351,7 +358,7 @@ namespace rajiunschool.Controllers
             try
             {
                 var studentinfo = await _context.PaymentViewForStudents
-                    .FirstOrDefaultAsync(s => s.transictionid==transictionid);
+                    .FirstOrDefaultAsync(s => s.transictionid == transictionid);
 
                 if (studentinfo == null)
                 {
@@ -655,16 +662,16 @@ namespace rajiunschool.Controllers
             }
         }
         //make a method named ViewEvaluation
-      
+
         public async Task<IActionResult> ViewEvaluation()
         {
             try
             {
-                var evaluationlist= _context.Teacherevaluations
+                var evaluationlist = _context.Teacherevaluations
                     .Where(s => s.teacherid == HttpContext.Session.GetInt32("userid"))
                     .ToList();
                 var evaluationList = new List<teacherevaluationextend>();
-                foreach(var evaluation in evaluationlist)
+                foreach (var evaluation in evaluationlist)
                 {
                     var subject = _context.SubjectLists
                         .FirstOrDefault(s => s.id == evaluation.subjectid);
@@ -682,7 +689,7 @@ namespace rajiunschool.Controllers
             {
                 _logger.LogError(ex, "Error adding teacher evaluation.");
                 TempData["ErrorMessage"] = "An error occurred while adding the evaluation.";
-                return RedirectToAction("Dashboard","Dashboard");
+                return RedirectToAction("Dashboard", "Dashboard");
             }
         }
         public IActionResult CourseReview()
@@ -811,7 +818,7 @@ namespace rajiunschool.Controllers
                 }
                 var newDept = new department
                 {
-                   name = deptname
+                    name = deptname
                 };
                 _context.Department.Add(newDept);
                 await _context.SaveChangesAsync();

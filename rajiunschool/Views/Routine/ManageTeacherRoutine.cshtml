@@ -1,0 +1,36 @@
+﻿@model List<rajiunschool.Models.TeacherRoutine>
+
+@{
+    ViewData["Title"] = "Manage Teacher Routine";
+}
+
+<h2>Manage Teacher Routine</h2>
+
+<p>
+    <a asp-action="UploadTeacherRoutine" asp-controller="Routine" class="btn btn-primary">Upload New Teacher Routine</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Teacher Username</th>
+            <th>Department</th>
+            <th>File Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TeacherUsername</td>
+                <td>@item.Department</td>
+                <td>@item.FileName</td>
+                <td>
+                    <a href="/@item.FilePath" target="_blank" class="btn btn-info">View</a>
+                    <a asp-action="DeleteTeacherRoutine" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

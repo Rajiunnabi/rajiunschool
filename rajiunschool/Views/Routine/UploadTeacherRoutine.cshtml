@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Upload Teacher Routine";
+}
+
+<h2>Upload Teacher Routine</h2>
+
+<form asp-action="UploadTeacherRoutineAdd" asp-controller="Routine" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label class="form-label">Teacher Id</label>
+        <input type="number" name="teacherid" class="form-control" placeholder="Enter Teacher Id" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Teacher Username</label>
+        <input type="text" name="teacherUsername" class="form-control" placeholder="Enter Teacher Username" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Department</label>
+        <input type="text" name="department" class="form-control" placeholder="Enter Department" required>
+    </div>
+
+    <div class="form-group">
+        <label for="file">Upload Routine (PDF)</label>
+        <input type="file" name="file" class="form-control" accept="application/pdf" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>

@@ -47,13 +47,20 @@
 
         <form asp-action="AddUser" asp-controller="CrudTable" method="post" enctype="multipart/form-data">
             <div class="mb-3">
+                <label for="SelectedOption">Choose an option:</label>
+                <select asp-for="SelectedOption" asp-items="Model.Options" class="form-control" id="roleDropdown">
+                    <option value="">-- Select an option --</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label">Username</label>
                 <input type="text" name="Username" class="form-control" placeholder="Enter username" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Department</label>
-                <input type="text" name="Dept" class="form-control" placeholder="Enter department" required>
+                <input type="text" name="Dept" class="form-control" id="departmentField" placeholder="Enter department" required>
             </div>
 
             <div class="mb-3">
@@ -61,15 +68,21 @@
                 <input type="password" name="Password" class="form-control" placeholder="Enter Password" required>
             </div>
 
-            <div class="mb-3">
-                <label for="SelectedOption">Choose an option:</label>
-                <select asp-for="SelectedOption" asp-items="Model.Options" class="form-control">
-                    <option value="">-- Select an option --</option>
-                </select>
-            </div>
-
-
             <button type="submit" class="btn btn-success">Add User</button>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById('roleDropdown').addEventListener('change', function () {
+            var departmentField = document.getElementById('departmentField');
+            if (this.value === 'Banker') {
+                departmentField.disabled = true;
+                departmentField.value = ''; // Clear the field if disabled
+            } else {
+                departmentField.disabled = false;
+            }
+        });
+    </script>
+}

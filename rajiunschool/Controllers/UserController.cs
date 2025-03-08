@@ -259,9 +259,19 @@ public class UserController : Controller
             var profile = await _context.ProfileEmployees.FirstOrDefaultAsync(e => e.profileid == userId);
             if (profile == null)
             {
-                return NotFound();  // If the teacher profile is not found, show an error
+                return NotFound();  // If the profile is not found, show an error
             }
-            return View(profile);  // Pass the teacher profile to the EditProfile view
+
+            // Get the user's role
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.id == userId);
+            if (user == null)
+            {
+                return NotFound();  // If the user is not found, show an error
+            }
+
+            ViewData["UserRole"] = user.role; // Pass the user's role to the view
+
+            return View(profile);  // Pass the profile to the EditProfile view
         }
         catch (Exception ex)
         {
@@ -269,6 +279,7 @@ public class UserController : Controller
             return RedirectToAction("Error", "Home");
         }
     }
+
 
     [HttpPost]
     public async Task<IActionResult> EditProfile(profilestudent studentModel, profileemployee employeeModel, IFormFile? profilePicture)
@@ -316,6 +327,29 @@ public class UserController : Controller
                 profile.sex = employeeModel?.sex;
                 profile.bloodgroup = employeeModel?.bloodgroup;
                 profile.details = employeeModel?.details;
+
+                // Handle profile picture upload
+                if (profilePicture != null)
+                {
+                    profile.ProfilePicture = await SaveProfilePicture(profilePicture);
+                }
+
+                _context.ProfileEmployees.Update(profile);
+            }
+            else if (role == "Banker")
+            {
+                var profile = await _context.ProfileEmployees.FirstOrDefaultAsync(e => e.profileid == userId); // Assuming banker data is in ProfileEmployees
+                if (profile == null)
+                {
+                    return NotFound();
+                }
+
+                // Update profile properties for banker
+                profile.name = employeeModel?.name;
+                profile.age = employeeModel?.age;
+                profile.sex = employeeModel?.sex;
+                profile.bloodgroup = employeeModel?.bloodgroup;
+                profile.details = employeeModel?.details; // Assuming bankers have details too
 
                 // Handle profile picture upload
                 if (profilePicture != null)
@@ -414,6 +448,4 @@ public class UserController : Controller
             return RedirectToAction("Error", "Home");
         }
     }
-
-
 }

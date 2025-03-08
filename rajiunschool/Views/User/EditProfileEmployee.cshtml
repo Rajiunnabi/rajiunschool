@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit Profile";
+    var userRole = ViewData["UserRole"] as string;  // Get the user role from ViewData
 }
 
 <div class="container mt-4">
@@ -43,7 +44,9 @@
 
                 <div class="mb-3">
                     <label asp-for="dept" class="form-label">Department</label>
-                    <input asp-for="dept" type="text" class="form-control" required>
+                    <input type="text" name="Dept" class="form-control" placeholder="Enter department"
+                        @(userRole == "Banker" ? "disabled" : "") required
+                        @(userRole != "Banker" ? "required" : "") />
                 </div>
 
                 <div class="mb-3">

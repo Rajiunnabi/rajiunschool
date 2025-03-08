@@ -1,0 +1,20 @@
+﻿@model rajiunschool.Models.TeacherRoutine
+
+@{
+    ViewData["Title"] = "View Teacher Routine";
+}
+
+<h2>Your Routine</h2>
+
+@if (Model != null)
+{
+    <p>
+        <strong>Teacher Username:</strong> @Model.TeacherUsername <br />
+        <strong>Department:</strong> @Model.Department <br />
+    </p>
+    <a href="/@Model.FilePath" target="_blank" class="btn btn-primary">View Routine (PDF)</a>
+}
+else
+{
+    <p class="text-danger">No routine available for your department.</p>
+}
