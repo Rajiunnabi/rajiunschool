@@ -1,21 +1,132 @@
-﻿
-@model routine
+﻿@model routine
 
 @{
     ViewData["Title"] = "View Routine";
 }
 
-<h2>Your Routine</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>View Routine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-@if (Model != null)
-{
-    <p>
-        <strong>Department:</strong> @Model.dept <br />
-		<strong>Semester:</strong> @Model.semester <br />
-    </p>
-    <a href="/@Model.FilePath" target="_blank" class="btn btn-primary">View Routine (PDF)</a>
-}
-else
-{
-    <p class="text-danger">@ViewBag.Message</p>
-}
+        .left-navbar {
+            width: 250px;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .left-navbar h4 {
+                margin-bottom: 20px;
+                border-bottom: 2px solid white;
+                padding-bottom: 10px;
+                font-size: 22px;
+            }
+
+        .nav-link {
+            color: white;
+            display: block;
+            padding: 12px;
+            width: 100%;
+            text-align: left;
+            text-decoration: none;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+            .nav-link:hover {
+                background-color: #333;
+                padding-left: 15px;
+            }
+
+        .logout-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            cursor: pointer;
+            border-radius: 30px;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 270px;
+            padding: 40px;
+            color: black;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logout Button -->
+    <a href="@Url.Action("Logout", "Auth")" class="logout-button">Logout</a>
+
+    <!-- Sidebar Navbar (Fixed Left) -->
+    <div class="left-navbar">
+        <h4>Student Panel</h4>
+        <a href="@Url.Action("Profile", "User")" class="nav-link">Profile</a>
+        <a href="@Url.Action("EditProfileStudent", "User")" class="nav-link">Edit Profile</a>
+        <a href="@Url.Action("StudentResult", "Result")" class="nav-link">Result</a>
+        <a href="/CrudTable/ViewPayment" class="nav-link">Payments</a>
+        <a href="/CrudTable/TeacherEvaluation" class="nav-link">Teacher Evaluation</a>
+        <a href="/Routine/ViewStudentRoutine" class="nav-link">See Routine</a>
+        <a href="/Dashboard/StudentDashboard" class="nav-link"><< Back</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="container mt-4">
+            <h2>Your Routine</h2>
+
+            @if (Model != null)
+            {
+                <p>
+                    <strong>Department:</strong> @Model.dept <br />
+                    <strong>Semester:</strong> @Model.semester <br />
+                </p>
+                <a href="/@Model.FilePath" target="_blank" class="btn btn-primary">View Routine (PDF)</a>
+            }
+            else
+            {
+                <p class="text-danger">@ViewBag.Message</p>
+            }
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

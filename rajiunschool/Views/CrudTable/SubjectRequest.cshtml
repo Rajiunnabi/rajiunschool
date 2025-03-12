@@ -1,129 +1,219 @@
 ﻿@model List<subjectrequestextend>
 
-<style>
-    .container {
-        margin-top: 50px;
-        position: relative;
-    }
+@{
+    ViewData["Title"] = "Subject Requests";
+}
 
-    .top-right-btn {
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin: 10px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th, td {
-        padding: 10px;
-        border: 1px solid #ddd;
-        text-align: center;
-    }
-
-    th {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .btn-danger, .btn-primary {
-        padding: 5px 10px;
-        text-decoration: none;
-        color: white;
-        border-radius: 5px;
-    }
-
-    .btn-danger {
-        background-color: red;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-    }
-
-    .search-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-
-    .search-input {
-        width: 300px;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
-
-    .search-button {
-        padding: 8px 15px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-        .search-button:hover {
-            background-color: #0056b3;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Subject Requests</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
         }
 
-    .reset-button {
-        padding: 8px 15px;
-        background-color: gray;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        text-decoration: none;
-        margin-left: 10px;
-    }
-
-        .reset-button:hover {
-            background-color: darkgray;
+        .left-navbar {
+            width: 250px;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-</style>
 
-<div class="container">
-    <h2 class="text-center mb-4">Subject Requests</h2>
+            .left-navbar h4 {
+                margin-bottom: 20px;
+                border-bottom: 2px solid white;
+                padding-bottom: 10px;
+                font-size: 22px;
+            }
 
-    <!-- Search Bar -->
-    <div class="search-container">
-        <form method="get" action="@Url.Action("SubjectRequest", "CrudTable")">
-            <input type="text" name="searchQuery" class="search-input" placeholder="Search by Subject ID or Name" />
-            <button type="submit" class="search-button">Search</button>
-            <a href="@Url.Action("SubjectRequest", "CrudTable")" class="reset-button">Reset</a>
-        </form>
+        .nav-link {
+            color: white;
+            display: block;
+            padding: 12px;
+            width: 100%;
+            text-align: left;
+            text-decoration: none;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+            .nav-link:hover {
+                background-color: #333;
+                padding-left: 15px;
+            }
+
+        .content {
+            flex: 1;
+            margin-left: 270px;
+            padding: 40px;
+            color: black;
+        }
+
+        .container {
+            margin-top: 50px;
+            position: relative;
+        }
+
+        .top-right-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-danger, .btn-primary {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .btn-danger {
+            background-color: red;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 300px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .search-button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .search-button:hover {
+                background-color: #0056b3;
+            }
+
+        .reset-button {
+            padding: 8px 15px;
+            background-color: gray;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+            .reset-button:hover {
+                background-color: darkgray;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navbar (Fixed Left) -->
+    <div class="left-navbar">
+        <h4>Navigation</h4>
+        <a href="/CrudTable/SubjectList" class="nav-link">Subject CRUD</a>
+        <a href="/CrudTable/AddSubject" class="nav-link">Add Subject</a>
+        <a href="/CrudTable/SubjectRequest" class="nav-link">Subject Request</a>
+        <a href="/User/Banker" class="nav-link">👨‍🏫 Manage Banker</a>
+        <a href="/User/Others" class="nav-link">👨‍🏫 Manage Others</a>
+        <a href="/Routine/ManageTeacherRoutine" class="nav-link">📅 Teacher Routine</a>
+        <a href="/CrudTable/AddUser" class="nav-link">👥 Add Users</a>
+        <a href="/User/nextPage?UserListnow=Teacher" class="nav-link"><< Back</a>
+        <a href="/User/Teacher" class="nav-link"><< Back To List</a>
     </div>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Subject ID</th>
-                <th>Instructor</th>
-                <th>View Profile</th>
-				<th>Action</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var subjectrequest in Model)
-            {
-                <tr>
-                    <td>@subjectrequest.subject.id</td>
-                    <td>@subjectrequest.teacherid</td>
-                    <td>
-                        <a href="@Url.Action("Details", "User", new { id = subjectrequest.teacherid })" class="btn btn-primary">View Profile</a>
-                    </td>
-                    <td>
-                        <a href="@Url.Action("AddSubjecttoTeacher", "CrudTable", new { subjectid=subjectrequest.subject.id,teacherid = subjectrequest.teacherid })" class="btn btn-primary">Accept</a>
-                    </td>
-					<td>
-                        <a href="@Url.Action("DeleteSubjectRequest", "CrudTable", new { subjectid=subjectrequest.subject.id,teacherid = subjectrequest.teacherid })" class="btn btn-danger">Reject</a>
-					</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+    <!-- Main Content -->
+    <div class="content">
+        <div class="container">
+            <h2 class="text-center mb-4">Subject Requests</h2>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <form method="get" action="@Url.Action("SubjectRequest", "CrudTable")">
+                    <input type="text" name="searchQuery" class="search-input" placeholder="Search by Subject ID or Name" />
+                    <button type="submit" class="search-button">Search</button>
+                    <a href="@Url.Action("SubjectRequest", "CrudTable")" class="reset-button">Reset</a>
+                </form>
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Subject ID</th>
+                        <th>Instructor</th>
+                        <th>View Profile</th>
+                        <th>Accept</th>
+                        <th>Reject</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var subjectrequest in Model)
+                    {
+                        <tr>
+                            <td>@subjectrequest.subject.id</td>
+                            <td>@subjectrequest.teacherid</td>
+                            <td>
+                                <a href="@Url.Action("Details", "User", new { id = subjectrequest.teacherid })" class="btn btn-primary">View Profile</a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("AddSubjecttoTeacher", "CrudTable", new { subjectid = subjectrequest.subject.id, teacherid = subjectrequest.teacherid })" class="btn btn-primary">Accept</a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("DeleteSubjectRequest", "CrudTable", new { subjectid = subjectrequest.subject.id, teacherid = subjectrequest.teacherid })" class="btn btn-danger">Reject</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

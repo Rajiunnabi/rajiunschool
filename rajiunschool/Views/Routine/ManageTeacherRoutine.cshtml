@@ -4,33 +4,170 @@
     ViewData["Title"] = "Manage Teacher Routine";
 }
 
-<h2>Manage Teacher Routine</h2>
-
-<p>
-    <a asp-action="UploadTeacherRoutine" asp-controller="Routine" class="btn btn-primary">Upload New Teacher Routine</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Teacher Username</th>
-            <th>Department</th>
-            <th>File Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.TeacherUsername</td>
-                <td>@item.Department</td>
-                <td>@item.FileName</td>
-                <td>
-                    <a href="/@item.FilePath" target="_blank" class="btn btn-info">View</a>
-                    <a asp-action="DeleteTeacherRoutine" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Teacher Routine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
         }
-    </tbody>
-</table>
+
+        .left-navbar {
+            width: 250px;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .left-navbar h4 {
+                margin-bottom: 20px;
+                border-bottom: 2px solid white;
+                padding-bottom: 10px;
+                font-size: 22px;
+            }
+
+        .nav-link {
+            color: white;
+            display: block;
+            padding: 12px;
+            width: 100%;
+            text-align: left;
+            text-decoration: none;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+            .nav-link:hover {
+                background-color: #333;
+                padding-left: 15px;
+            }
+
+        .content {
+            flex: 1;
+            margin-left: 270px;
+            padding: 40px;
+            color: black;
+        }
+
+        .container {
+            margin-top: 50px;
+            position: relative;
+        }
+
+        .top-right-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-danger, .btn-primary, .btn-info {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .btn-danger {
+            background-color: red;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navbar (Fixed Left) -->
+    <div class="left-navbar">
+        <h4>Navigation</h4>
+        <a href="/CrudTable/SubjectList" class="nav-link">Subject CRUD</a>
+        <a href="/CrudTable/AddSubject" class="nav-link">Add Subject</a>
+        <a href="/CrudTable/SubjectRequest" class="nav-link">Subject Request</a>
+        <a href="/User/Banker" class="nav-link">👨‍🏫 Manage Banker</a>
+        <a href="/User/Others" class="nav-link">👨‍🏫 Manage Others</a>
+        <a href="/Routine/ManageTeacherRoutine" class="nav-link">📅 Teacher Routine</a>
+        <a href="/CrudTable/AddUser" class="nav-link">👥 Add Users</a>
+        <a href="/User/nextPage?UserListnow=Teacher" class="nav-link"><< Back</a>
+        <a href="/User/Teacher" class="nav-link"><< Back To List</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="container">
+            <h2 class="text-center mb-4">Manage Teacher Routine</h2>
+
+            <p>
+                <a asp-action="UploadTeacherRoutine" asp-controller="Routine" class="btn btn-primary">Upload New Teacher Routine</a>
+            </p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Teacher Username</th>
+                        <th>Department</th>
+                        <th>File Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.TeacherUsername</td>
+                            <td>@item.Department</td>
+                            <td>@item.FileName</td>
+                            <td>
+                                <a href="/@item.FilePath" target="_blank" class="btn btn-info">View</a>
+                                <a asp-action="DeleteTeacherRoutine" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

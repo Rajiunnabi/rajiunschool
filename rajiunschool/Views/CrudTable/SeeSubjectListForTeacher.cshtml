@@ -1,125 +1,228 @@
 ﻿@model List<subjectlist>
 
-<style>
-    .container {
-        margin-top: 50px;
-        position: relative;
-    }
+@{
+    ViewData["Title"] = "Subject List";
+}
 
-    .top-right-btn {
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin: 10px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th, td {
-        padding: 10px;
-        border: 1px solid #ddd;
-        text-align: center;
-    }
-
-    th {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .btn-danger, .btn-primary {
-        padding: 5px 10px;
-        text-decoration: none;
-        color: white;
-        border-radius: 5px;
-    }
-
-    .btn-danger {
-        background-color: red;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-    }
-
-    .search-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-
-    .search-input {
-        width: 300px;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
-
-    .search-button {
-        padding: 8px 15px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-        .search-button:hover {
-            background-color: #0056b3;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Subject List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
 
-    .reset-button {
-        padding: 8px 15px;
-        background-color: gray;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        text-decoration: none;
-        margin-left: 10px;
-    }
-
-        .reset-button:hover {
-            background-color: darkgray;
+        .left-navbar {
+            width: 250px;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-</style>
 
-<div class="container">
-    <h2 class="text-center mb-4">Subject List</h2>
+            .left-navbar h4 {
+                margin-bottom: 20px;
+                border-bottom: 2px solid white;
+                padding-bottom: 10px;
+                font-size: 22px;
+            }
 
-    <!-- Search Bar -->
-    <div class="search-container">
-        <form method="get" action="@Url.Action("SeeSubjectListForTeacher", "CrudTable")">
-            <input type="number" name="searchQuery" class="search-input" placeholder="Search by Subject ID" />
-            <button type="submit" class="search-button">Search</button>
-            <a href="@Url.Action("SeeSubjectListForTeacher", "CrudTable")" class="reset-button">Reset</a>
-        </form>
+        .nav-link {
+            color: white;
+            display: block;
+            padding: 12px;
+            width: 100%;
+            text-align: left;
+            text-decoration: none;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+            .nav-link:hover {
+                background-color: #333;
+                padding-left: 15px;
+            }
+
+        .logout-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            cursor: pointer;
+            border-radius: 30px;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 270px;
+            padding: 40px;
+            color: black;
+        }
+
+        .container {
+            margin-top: 50px;
+            position: relative;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-danger, .btn-primary {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .btn-danger {
+            background-color: red;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 300px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .search-button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .search-button:hover {
+                background-color: #0056b3;
+            }
+
+        .reset-button {
+            padding: 8px 15px;
+            background-color: gray;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+            .reset-button:hover {
+                background-color: darkgray;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- Logout Button -->
+    <a href="@Url.Action("Logout", "Auth")" class="logout-button">Logout</a>
+
+    <!-- Sidebar Navbar (Fixed Left) -->
+    <div class="left-navbar">
+        <h4>Teacher Panel</h4>
+        <a href="@Url.Action("Profile", "User")" class="nav-link">Profile</a>
+        <a href="@Url.Action("EditProfileEmployee", "User")" class="nav-link">Edit Profile</a>
+        <a href="/CrudTable/CourseReview" class="nav-link">Course Review</a>
+        <a href="/Result/CourseView" class="nav-link">View My Subjects</a>
+        <a href="/Result/ViewFailedStudent" class="nav-link">View Failed Students</a>
+        <a href="/CrudTable/SeeSubjectListForTeacher" class="nav-link">See Available Subjects</a>
+        <a href="/CrudTable/ViewEvaluation" class="nav-link">Evaluation</a>
+        <a href="/Routine/ViewTeacherRoutine" class="nav-link">See Routine</a>
+        <a href="/Dashboard/TeacherDashboard" class="nav-link"><< Back</a>
     </div>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Subject ID</th>
-                <th>Subject Name</th>
-                <th>Semester</th>
-                <th>FeePerClass</th>
-                <th>Apply</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var subjectlist in Model)
-            {
-                <tr>
-                    <td>@subjectlist.id</td>
-                    <td>@subjectlist.subjectname</td>
-                    <td>@subjectlist.semester</td>
-                    <td>@subjectlist.takaperclass</td>
-                    <td>
-                        <a href="@Url.Action("ApplyForSubject", "CrudTable", new {subjectid=subjectlist.id})" class="btn btn-danger">Apply</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+    <!-- Main Content -->
+    <div class="content">
+        <div class="container">
+            <h2 class="text-center mb-4">Subject List</h2>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <form method="get" action="@Url.Action("SeeSubjectListForTeacher", "CrudTable")">
+                    <input type="number" name="searchQuery" class="search-input" placeholder="Search by Subject ID" />
+                    <button type="submit" class="search-button">Search</button>
+                    <a href="@Url.Action("SeeSubjectListForTeacher", "CrudTable")" class="reset-button">Reset</a>
+                </form>
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Subject ID</th>
+                        <th>Subject Name</th>
+                        <th>Semester</th>
+                        <th>FeePerClass</th>
+                        <th>Apply</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var subjectlist in Model)
+                    {
+                        <tr>
+                            <td>@subjectlist.id</td>
+                            <td>@subjectlist.subjectname</td>
+                            <td>@subjectlist.semester</td>
+                            <td>@subjectlist.takaperclass</td>
+                            <td>
+                                <a href="@Url.Action("ApplyForSubject", "CrudTable", new {subjectid=subjectlist.id})" class="btn btn-danger">Apply</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

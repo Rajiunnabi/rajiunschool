@@ -1,236 +1,346 @@
 ﻿@model List<teacherevaluationextend>
 
-<style>
-    .container {
-        margin-top: 50px;
-        position: relative;
-    }
+@{
+    ViewData["Title"] = "Evaluation List";
+}
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th, td {
-        padding: 10px;
-        border: 1px solid #ddd;
-        text-align: center;
-    }
-
-    th {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .btn-details {
-        padding: 5px 10px;
-        text-decoration: none;
-        color: white;
-        background-color: #28a745;
-        border-radius: 5px;
-        font-size: 12px;
-        cursor: pointer;
-    }
-
-    .search-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-
-    .search-input {
-        width: 300px;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
-
-    .search-button {
-        padding: 8px 15px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-        .search-button:hover {
-            background-color: #0056b3;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Evaluation List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
 
-    .reset-button {
-        padding: 8px 15px;
-        background-color: gray;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        text-decoration: none;
-        margin-left: 10px;
-    }
-
-        .reset-button:hover {
-            background-color: darkgray;
+        .left-navbar {
+            width: 250px;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-    .btn-details:hover {
-        background-color: #218838;
-    }
+            .left-navbar h4 {
+                margin-bottom: 20px;
+                border-bottom: 2px solid white;
+                padding-bottom: 10px;
+                font-size: 22px;
+            }
 
-    /* Modal Styling */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(5px);
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    .modal-content {
-        background-color: #fff;
-        margin: 10% auto;
-        padding: 25px;
-        border: none;
-        border-radius: 15px;
-        width: 50%;
-        max-width: 600px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        transform: scale(0.9);
-        opacity: 0;
-        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    }
-
-    .modal.show .modal-content {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    .modal-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #007bff;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .modal-body {
-        font-size: 16px;
-        color: #333;
-    }
-
-    .modal-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-    }
-
-        .modal-table th,
-        .modal-table td {
+        .nav-link {
+            color: white;
+            display: block;
             padding: 12px;
-            border-bottom: 1px solid #eee;
+            width: 100%;
             text-align: left;
+            text-decoration: none;
+            transition: 0.3s;
+            border-radius: 5px;
         }
 
-        .modal-table th {
-            background-color: #f8f9fa;
-            color: #555;
-            font-weight: 600;
+            .nav-link:hover {
+                background-color: #333;
+                padding-left: 15px;
+            }
+
+        .logout-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            cursor: pointer;
+            border-radius: 30px;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            z-index: 1000;
         }
 
-        .modal-table td {
+        .content {
+            flex: 1;
+            margin-left: 270px;
+            padding: 40px;
+            color: black;
+        }
+
+        .container {
+            margin-top: 50px;
+            position: relative;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-details {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #28a745;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 300px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .search-button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .search-button:hover {
+                background-color: #0056b3;
+            }
+
+        .reset-button {
+            padding: 8px 15px;
+            background-color: gray;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+            .reset-button:hover {
+                background-color: darkgray;
+            }
+
+        .btn-details:hover {
+            background-color: #218838;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 25px;
+            border: none;
+            border-radius: 15px;
+            width: 50%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-body {
+            font-size: 16px;
             color: #333;
         }
 
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: color 0.2s ease-in-out;
-    }
-
-        .close:hover {
-            color: #000;
+        .modal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
         }
-</style>
 
-<div class="container">
-    <h2 class="text-center mb-4">Evaluation List</h2>
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Subject ID</th>
-                <th>Subject Name</th>
-                <th>Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var info in Model)
-            {
-                <tr>
-                    <td>@info.subjectid</td>
-                    <td>@info.subjectname</td>
-                    <td>
-                        <button class="btn-details" onclick="openModal('@info.subjectid', '@info.subjectname', '@Uri.EscapeDataString(info.details)')">
-                            Details
-                        </button>
-                    </td>
-                </tr>
+            .modal-table th,
+            .modal-table td {
+                padding: 12px;
+                border-bottom: 1px solid #eee;
+                text-align: left;
             }
-        </tbody>
-    </table>
-</div>
 
-<!-- Modal Structure -->
-<div id="paymentModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h3 class="modal-title">Details</h3>
-        <div class="modal-body">
-            <table class="modal-table">
-                <tr>
-                    <th>Subject ID</th>
-                    <td id="modal-subjectid"></td>
-                </tr>
-                <tr>
-                    <th>Subject Name</th>
-                    <td id="modal-subjectname"></td>
-                </tr>
-                <tr>
-                    <th>Details</th>
-                    <td id="modal-details"></td>
-                </tr>
+            .modal-table th {
+                background-color: #f8f9fa;
+                color: #555;
+                font-weight: 600;
+            }
+
+            .modal-table td {
+                color: #333;
+            }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease-in-out;
+        }
+
+            .close:hover {
+                color: #000;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- Logout Button -->
+    <a href="@Url.Action("Logout", "Auth")" class="logout-button">Logout</a>
+
+    <!-- Sidebar Navbar (Fixed Left) -->
+    <div class="left-navbar">
+        <h4>Teacher Panel</h4>
+        <a href="@Url.Action("Profile", "User")" class="nav-link">Profile</a>
+        <a href="@Url.Action("EditProfileEmployee", "User")" class="nav-link">Edit Profile</a>
+        <a href="/CrudTable/CourseReview" class="nav-link">Course Review</a>
+        <a href="/Result/CourseView" class="nav-link">View My Subjects</a>
+        <a href="/Result/ViewFailedStudent" class="nav-link">View Failed Students</a>
+        <a href="/CrudTable/SeeSubjectListForTeacher" class="nav-link">See Available Subjects</a>
+        <a href="/CrudTable/ViewEvaluation" class="nav-link">Evaluation</a>
+        <a href="/Routine/ViewTeacherRoutine" class="nav-link">See Routine</a>
+        <a href="/Dashboard/TeacherDashboard" class="nav-link"><< Back</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="container">
+            <h2 class="text-center mb-4">Evaluation List</h2>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Subject ID</th>
+                        <th>Subject Name</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var info in Model)
+                    {
+                        <tr>
+                            <td>@info.subjectid</td>
+                            <td>@info.subjectname</td>
+                            <td>
+                                <button class="btn-details" onclick="openModal('@info.subjectid', '@info.subjectname', '@Uri.EscapeDataString(info.details)')">
+                                    Details
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
             </table>
         </div>
     </div>
-</div>
 
-<script>
-    function openModal(subjectid, subjectname, details) {
-        const modal = document.getElementById("paymentModal");
-        modal.classList.add("show");
-        modal.style.display = "block";
+    <!-- Modal Structure -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 class="modal-title">Details</h3>
+            <div class="modal-body">
+                <table class="modal-table">
+                    <tr>
+                        <th>Subject ID</th>
+                        <td id="modal-subjectid"></td>
+                    </tr>
+                    <tr>
+                        <th>Subject Name</th>
+                        <td id="modal-subjectname"></td>
+                    </tr>
+                    <tr>
+                        <th>Details</th>
+                        <td id="modal-details"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
 
-        // Decode the details string
-        const decodedDetails = decodeURIComponent(details);
+    <script>
+        function openModal(subjectid, subjectname, details) {
+            const modal = document.getElementById("paymentModal");
+            modal.classList.add("show");
+            modal.style.display = "block";
 
-        document.getElementById("modal-subjectid").innerText = subjectid;
-        document.getElementById("modal-subjectname").innerText = subjectname;
-        document.getElementById("modal-details").innerText = decodedDetails;
-    }
+            // Decode the details string
+            const decodedDetails = decodeURIComponent(details);
 
-    function closeModal() {
-        const modal = document.getElementById("paymentModal");
-        modal.classList.remove("show");
-        setTimeout(() => {
-            modal.style.display = "none";
-        }, 300);
-    }
-</script>
+            document.getElementById("modal-subjectid").innerText = subjectid;
+            document.getElementById("modal-subjectname").innerText = subjectname;
+            document.getElementById("modal-details").innerText = decodedDetails;
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("paymentModal");
+            modal.classList.remove("show");
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 300);
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

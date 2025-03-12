@@ -4,34 +4,167 @@
     ViewData["Title"] = "Add Subject";
 }
 
-<h2 class="text-center">Add Subject</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Subject</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
 
-@if (ViewBag.Error != null)
-{
-    <div class="alert alert-danger">@ViewBag.Error</div>
-}
+        .left-navbar {
+            width: 250px;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-<form asp-action="AddSubject" asp-controller="CrudTable" method="post">
+            .left-navbar h4 {
+                margin-bottom: 20px;
+                border-bottom: 2px solid white;
+                padding-bottom: 10px;
+                font-size: 22px;
+            }
 
-    <div class="form-group">
-        <label for="subjectname">Subject Name:</label>
-        <input type="text" class="form-control" id="subjectname" name="subjectname" required />
+        .nav-link {
+            color: white;
+            display: block;
+            padding: 12px;
+            width: 100%;
+            text-align: left;
+            text-decoration: none;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+            .nav-link:hover {
+                background-color: #333;
+                padding-left: 15px;
+            }
+
+        .content {
+            flex: 1;
+            margin-left: 270px;
+            padding: 40px;
+            color: black;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            margin: 20px auto;
+        }
+
+            .form-container h2 {
+                margin-bottom: 20px;
+                color: #007bff;
+            }
+
+        .form-group label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .alert-danger {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navbar (Fixed Left) -->
+    <div class="left-navbar">
+        <h4>Navigation</h4>
+        <a href="/CrudTable/SubjectList" class="nav-link">Subject CRUD</a>
+        <a href="/CrudTable/AddSubject" class="nav-link">Add Subject</a>
+        <a href="/CrudTable/SubjectRequest" class="nav-link">Subject Request</a>
+        <a href="/User/Banker" class="nav-link">👨‍🏫 Manage Banker</a>
+        <a href="/User/Others" class="nav-link">👨‍🏫 Manage Others</a>
+        <a href="/Routine/ManageTeacherRoutine" class="nav-link">📅 Teacher Routine</a>
+        <a href="/CrudTable/AddUser" class="nav-link">👥 Add Users</a>
+        <a href="/User/nextPage?UserListnow=Teacher" class="nav-link"><< Back</a>
+        <a href="/User/Teacher" class="nav-link"><< Back To List</a>
     </div>
 
-    <div class="form-group">
-        <label for="dept">Department:</label>
-        <input type="text" class="form-control" id="dept" name="dept" required />
+    <!-- Main Content -->
+    <div class="content">
+        <div class="form-container">
+            <h2 class="text-center">Add Subject</h2>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <form asp-action="AddSubject" asp-controller="CrudTable" method="post">
+                <div class="form-group mb-3">
+                    <label for="subjectname">Subject Name:</label>
+                    <input type="text" class="form-control" id="subjectname" name="subjectname" required />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="dept">Department:</label>
+                    <input type="text" class="form-control" id="dept" name="dept" required />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="semester">Semester:</label>
+                    <input type="text" class="form-control" id="semester" name="semester" required />
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="takperclass">Takper Class:</label>
+                    <input type="number" class="form-control" id="takperclass" name="takaperclass" required />
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Submit</button>
+            </form>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label for="semester">Semester:</label>
-        <input type="text" class="form-control" id="semester" name="semester" required />
-    </div>
-
-    <div class="form-group">
-        <label for="takperclass">Takper Class:</label>
-        <input type="number" class="form-control" id="takperclass" name="takaperclass" required />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
